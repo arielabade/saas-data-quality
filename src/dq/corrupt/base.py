@@ -11,6 +11,8 @@ Dependências: pandas, numpy, dq.domain.
 
 from __future__ import annotations
 
+import contextlib
+
 import numpy as np
 import pandas as pd
 
@@ -53,10 +55,8 @@ class Ctx:
         df = df.reindex(columns=cur.columns)
         for c in cur.columns:  # mantém os tipos da tabela original
             if str(cur[c].dtype) != str(df[c].dtype):
-                try:
+                with contextlib.suppress(TypeError, ValueError):
                     df[c] = df[c].astype(cur[c].dtype)
-                except (TypeError, ValueError):
-                    pass
         self.t[table] = pd.concat([cur, df], ignore_index=True)
 
 

@@ -199,7 +199,7 @@ def stale_prices(ctx: Ctx, log: DefectLog, cfg: dict) -> None:
     pr["vigencia_inicio"] = pd.to_datetime(pr["vigencia_inicio"])
     cur = pr.set_index("preco_id")
     prev = {}
-    for (plano, per), g in pr.sort_values("vigencia_inicio").groupby(["plano_id", "periodicidade"]):
+    for (_plano, _per), g in pr.sort_values("vigencia_inicio").groupby(["plano_id", "periodicidade"]):
         ids = g["preco_id"].tolist()
         prev.update({b: a for a, b in zip(ids[:-1], ids[1:])})
     elig = f.index[f["preco_id"].isin(list(prev)) & (f["valor_bruto"] > 0)]
