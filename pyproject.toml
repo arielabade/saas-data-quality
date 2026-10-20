@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saas-data-quality"
+version = "1.0.0"
+description = "Qualidade de dados ponta a ponta num ETL de SaaS por assinatura: defeitos injetados com registro, técnicas comparadas e impacto em MRR, churn e engajamento."
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26,<2.3",
+  "pandas>=2.2,<3",
+  "pyarrow>=15,<19",
+  "pyyaml>=6",
+  "scipy>=1.11",
+  "scikit-learn>=1.4",
+  "pandera>=0.20",
+  "plotly>=5.20",
+  "sqlalchemy>=2.0",
+  "pymysql>=1.1",
+  "faker>=24",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["E501", "B905", "SIM108"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["e2e: teste de ponta a ponta com perfil pequeno (mais lento)"]

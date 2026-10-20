@@ -1,0 +1,45 @@
+# MySQL 8 com o schema da base fonte (montado somente leitura) e a carga das tabelas usadas aqui.
+#   docker compose up -d --wait mysql
+#   docker compose --profile carga run --rm carga
+# A senha vem do .env (criado por `make env`); nada de credencial versionada.
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: saas-dq-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:?defina MYSQL_PASSWORD no .env (make env)}
+      MYSQL_DATABASE: cinelume
+      TZ: UTC
+    command:
+      - --local-infile=1
+      - --default-time-zone=+00:00
+      - --innodb-buffer-pool-size=512M
+      - --max-allowed-packet=256M
+    ports:
+      - "${MYSQL_PORT:-3327}:3306"
+    volumes:
+      - ${DQ_SOURCE_DIR:-../../streaming}/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - saas_dq_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+
+  carga:
+    image: mysql:8.4
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PWD: ${MYSQL_PASSWORD}
+      TABELAS: canais planos precos contas perfis dispositivos assinaturas assinatura_eventos faturas pagamentos titulos episodios sessoes_app reproducoes
+    volumes:
+      - ./data/generated/csv:/dados/csv:ro
+      - ./docker:/scripts:ro
+    entrypoint: ["bash", "/scripts/carregar.sh"]
+    profiles: ["carga"]
+
+volumes:
+  saas_dq_mysql:

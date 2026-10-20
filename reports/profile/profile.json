@@ -1,0 +1,2360 @@
+{
+  "tabelas": {
+    "canais": {
+      "linhas": 6,
+      "colunas": {
+        "canal_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.05,
+          "p25": 2.25,
+          "mediana": 3.5,
+          "p75": 4.75,
+          "p99": 5.95,
+          "max": 6.0,
+          "media": 3.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "codigo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6,
+          "tipo": "texto",
+          "valores": {
+            "organico": 1,
+            "busca_paga": 1,
+            "social_pago": 1,
+            "indicacao": 1,
+            "parceria_operadora": 1,
+            "tv": 1
+          }
+        },
+        "nome": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6,
+          "tipo": "texto",
+          "valores": {
+            "Orgânico": 1,
+            "Busca paga": 1,
+            "Social pago": 1,
+            "Indicação": 1,
+            "Parceria com operadora": 1,
+            "TV": 1
+          }
+        },
+        "tipo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 4,
+          "tipo": "texto",
+          "valores": {
+            "pago": 3,
+            "organico": 1,
+            "indicacao": 1,
+            "parceria": 1
+          }
+        },
+        "pago": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 3,
+            "1": 3
+          }
+        }
+      },
+      "pk": [
+        "canal_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "planos": {
+      "linhas": 3,
+      "colunas": {
+        "plano_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.02,
+          "p25": 1.5,
+          "mediana": 2.0,
+          "p75": 2.5,
+          "p99": 2.98,
+          "max": 3.0,
+          "media": 2.0,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "codigo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "texto",
+          "valores": {
+            "basico_anuncios": 1,
+            "padrao": 1,
+            "premium": 1
+          }
+        },
+        "nome": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "texto",
+          "valores": {
+            "Básico com anúncios": 1,
+            "Padrão": 1,
+            "Premium": 1
+          }
+        },
+        "com_anuncios": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 2,
+            "1": 1
+          }
+        },
+        "resolucao_maxima": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "texto",
+          "valores": {
+            "720p": 1,
+            "1080p": 1,
+            "4k": 1
+          }
+        },
+        "telas_simultaneas": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "2": 2,
+            "4": 1
+          }
+        },
+        "max_perfis": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1,
+          "tipo": "flag",
+          "valores": {
+            "5": 3
+          }
+        },
+        "permite_membro_extra": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "1": 2,
+            "0": 1
+          }
+        }
+      },
+      "pk": [
+        "plano_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "precos": {
+      "linhas": 20,
+      "colunas": {
+        "preco_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 20,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.19,
+          "p25": 5.75,
+          "mediana": 10.5,
+          "p75": 15.25,
+          "p99": 19.81,
+          "max": 20.0,
+          "media": 10.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "plano_id": {
+          "dtype": "Int64",
+          "nulos": 2,
+          "pct_nulos": 10.0,
+          "distintos": 3,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 2.0,
+          "p75": 3.0,
+          "p99": 3.0,
+          "max": 3.0,
+          "media": 2.0,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "item": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "texto",
+          "valores": {
+            "assinatura": 18,
+            "membro_extra": 2
+          }
+        },
+        "periodicidade": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "texto",
+          "valores": {
+            "mensal": 11,
+            "anual": 9
+          }
+        },
+        "valor_brl": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 20,
+          "tipo": "numerico",
+          "min": 12.9,
+          "p01": 13.09,
+          "p25": 35.65,
+          "mediana": 62.400000000000006,
+          "p75": 411.5,
+          "p99": 639.4999999999999,
+          "max": 649.0,
+          "media": 208.195,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "vigencia_inicio": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 4,
+          "tipo": "data",
+          "min": "2023-01-01",
+          "max": "2025-09-01"
+        },
+        "vigencia_fim": {
+          "dtype": "object",
+          "nulos": 7,
+          "pct_nulos": 35.0,
+          "distintos": 2,
+          "tipo": "data",
+          "min": "2024-07-31",
+          "max": "2025-08-31"
+        }
+      },
+      "pk": [
+        "preco_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "contas": {
+      "linhas": 6000,
+      "colunas": {
+        "conta_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6000,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 60.99,
+          "p25": 1500.75,
+          "mediana": 3000.5,
+          "p75": 4500.25,
+          "p99": 5940.01,
+          "max": 6000.0,
+          "media": 3000.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "email": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6000,
+          "tipo": "texto",
+          "top5": {
+            "eduarda_grande@mensagens.example.com": 1,
+            "arthurpereira@provedor.example.net": 1,
+            "gael_fernandes@mail.example.com": 1,
+            "gabrielly_machado@provedor.example.net": 1,
+            "andremontenegro5717@webmail.example.com": 1
+          },
+          "comprimento_mediano": 35.0
+        },
+        "nome_titular": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5583,
+          "tipo": "texto",
+          "top5": {
+            "Lunna Fonseca": 4,
+            "Pietra Carvalho": 4,
+            "Melissa Aragão": 4,
+            "Cauã Freitas": 3,
+            "Natália Castro": 3
+          },
+          "comprimento_mediano": 15.0
+        },
+        "cpf": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6000,
+          "tipo": "texto",
+          "top5": {
+            "098.432.571-97": 1,
+            "150.897.634-10": 1,
+            "317.506.942-80": 1,
+            "039.817.625-68": 1,
+            "497.082.635-83": 1
+          },
+          "comprimento_mediano": 14.0
+        },
+        "telefone": {
+          "dtype": "object",
+          "nulos": 460,
+          "pct_nulos": 7.667,
+          "distintos": 5540,
+          "tipo": "texto",
+          "top5": {
+            "38 92046-3977": 1,
+            "41 95342-8123": 1,
+            "35 98141-3457": 1,
+            "+55 83 96223-9107": 1,
+            "+55 41 97663-4201": 1
+          },
+          "comprimento_mediano": 16.0
+        },
+        "data_nascimento": {
+          "dtype": "object",
+          "nulos": 713,
+          "pct_nulos": 11.883,
+          "distintos": 4351,
+          "tipo": "data",
+          "min": "1940-12-12",
+          "max": "2008-09-24"
+        },
+        "cep": {
+          "dtype": "object",
+          "nulos": 311,
+          "pct_nulos": 5.183,
+          "distintos": 5689,
+          "tipo": "texto",
+          "top5": {
+            "69257-820": 1,
+            "32788-618": 1,
+            "30851806": 1,
+            "36052-043": 1,
+            "44607-470": 1
+          },
+          "comprimento_mediano": 8.0
+        },
+        "cidade": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2171,
+          "tipo": "texto",
+          "top5": {
+            "da Cunha": 45,
+            "Pinto": 43,
+            "Gomes": 42,
+            "da Rocha": 41,
+            "Lima": 41
+          },
+          "comprimento_mediano": 11.0
+        },
+        "uf": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 92,
+          "tipo": "texto",
+          "top5": {
+            "SP": 1305,
+            "MG": 599,
+            "RJ": 460,
+            "BA": 386,
+            "PR": 328
+          },
+          "comprimento_mediano": 2.0
+        },
+        "criada_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5999,
+          "tipo": "data_hora",
+          "min": "2023-10-01 03:11:13",
+          "max": "2026-11-01 02:41:36",
+          "antes_2023_10": 0,
+          "depois_2026_10": 2
+        },
+        "canal_aquisicao_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 2.0,
+          "p75": 4.0,
+          "p99": 6.0,
+          "max": 6.0,
+          "media": 2.688,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "indicada_por_conta_id": {
+          "dtype": "Int64",
+          "nulos": 5468,
+          "pct_nulos": 91.133,
+          "distintos": 428,
+          "tipo": "numerico",
+          "min": 2.0,
+          "p01": 5.0,
+          "p25": 385.0,
+          "mediana": 1150.0,
+          "p75": 2233.75,
+          "p99": 5132.859999999989,
+          "max": 5648.0,
+          "media": 1467.265037593985,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "aceita_marketing": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "1": 4094,
+            "0": 1906
+          }
+        }
+      },
+      "pk": [
+        "conta_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "perfis": {
+      "linhas": 15525,
+      "colunas": {
+        "perfil_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 15525,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 156.24,
+          "p25": 3882.0,
+          "mediana": 7763.0,
+          "p75": 11644.0,
+          "p99": 15369.76,
+          "max": 15525.0,
+          "media": 7763.0,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "conta_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6000,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 62.0,
+          "p25": 1498.0,
+          "mediana": 2984.0,
+          "p75": 4512.0,
+          "p99": 5941.76,
+          "max": 6000.0,
+          "media": 2998.3965217391305,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "nome": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 285,
+          "tipo": "texto",
+          "top5": {
+            "Sala": 493,
+            "Crianças": 308,
+            "Pequenos": 294,
+            "Infantil": 278,
+            "Kids": 265
+          },
+          "comprimento_mediano": 6.0
+        },
+        "infantil": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 14380,
+            "1": 1145
+          }
+        },
+        "principal": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 9525,
+            "1": 6000
+          }
+        },
+        "membro_extra": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 15379,
+            "1": 146
+          }
+        },
+        "telemetria_detalhada": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 14752,
+            "1": 773
+          }
+        },
+        "criado_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 15524,
+          "tipo": "data_hora",
+          "min": "2023-10-01 03:12:13",
+          "max": "2026-11-01 02:42:36",
+          "antes_2023_10": 0,
+          "depois_2026_10": 2
+        },
+        "excluido_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 15102,
+          "pct_nulos": 97.275,
+          "distintos": 423,
+          "tipo": "data_hora",
+          "min": "2023-12-13 01:39:17",
+          "max": "2026-10-29 20:40:41",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        }
+      },
+      "pk": [
+        "perfil_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "dispositivos": {
+      "linhas": 14745,
+      "colunas": {
+        "dispositivo_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14745,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 148.44,
+          "p25": 3687.0,
+          "mediana": 7373.0,
+          "p75": 11059.0,
+          "p99": 14597.56,
+          "max": 14745.0,
+          "media": 7373.0,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "conta_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6000,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 61.0,
+          "p25": 1517.0,
+          "mediana": 2993.0,
+          "p75": 4500.0,
+          "p99": 5942.5599999999995,
+          "max": 6000.0,
+          "media": 3003.495896914208,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "tipo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 16,
+          "tipo": "texto",
+          "valores": {
+            "celular": 6161,
+            "tv": 4719,
+            "web": 2196,
+            "tablet": 1311,
+            "Celular": 53,
+            "smartphone": 52,
+            "tv ": 47,
+            "mobile": 45,
+            "Smart TV": 42,
+            "TV": 33,
+            "navegador": 23,
+            "Web": 22,
+            "WEB": 13,
+            "TABLET": 11,
+            "tablet ": 10,
+            "Tablet": 7
+          }
+        },
+        "plataforma": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5,
+          "tipo": "texto",
+          "valores": {
+            "mobile_os_a": 5221,
+            "tv_os_a": 2572,
+            "mobile_os_b": 2429,
+            "tv_os_b": 2269,
+            "web": 2254
+          }
+        },
+        "registrado_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14743,
+          "tipo": "data_hora",
+          "min": "2023-10-01 19:19:38",
+          "max": "2026-10-31 23:50:44",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        }
+      },
+      "pk": [
+        "dispositivo_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "assinaturas": {
+      "linhas": 6944,
+      "colunas": {
+        "assinatura_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6944,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 70.43,
+          "p25": 1736.75,
+          "mediana": 3472.5,
+          "p75": 5208.25,
+          "p99": 6874.57,
+          "max": 6944.0,
+          "media": 3472.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "conta_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6000,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 52.0,
+          "p25": 1331.75,
+          "mediana": 2769.5,
+          "p75": 4327.25,
+          "p99": 5930.57,
+          "max": 6000.0,
+          "media": 2848.0904377880183,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "plano_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 2.0,
+          "p75": 3.0,
+          "p99": 3.0,
+          "max": 3.0,
+          "media": 1.9480126728110598,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "periodicidade": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "texto",
+          "valores": {
+            "mensal": 6538,
+            "anual": 406
+          }
+        },
+        "metodo_pagamento": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "texto",
+          "valores": {
+            "cartao": 5185,
+            "pix": 1116,
+            "boleto": 643
+          }
+        },
+        "status": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 4,
+          "tipo": "texto",
+          "valores": {
+            "encerrada": 3691,
+            "ativa": 3158,
+            "cancelamento_agendado": 61,
+            "inadimplente": 34
+          }
+        },
+        "iniciada_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6943,
+          "tipo": "data_hora",
+          "min": "2023-10-01 03:12:11",
+          "max": "2026-11-01 02:44:00",
+          "antes_2023_10": 0,
+          "depois_2026_10": 2
+        },
+        "trial_fim_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 6582,
+          "pct_nulos": 94.787,
+          "distintos": 362,
+          "tipo": "data_hora",
+          "min": "2023-10-09 10:02:38",
+          "max": "2024-04-07 22:24:41",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        },
+        "cancelamento_solicitado_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 4405,
+          "pct_nulos": 63.436,
+          "distintos": 2539,
+          "tipo": "data_hora",
+          "min": "2023-10-07 22:40:43",
+          "max": "2026-11-01 02:57:23",
+          "antes_2023_10": 0,
+          "depois_2026_10": 1
+        },
+        "encerrada_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 3253,
+          "pct_nulos": 46.846,
+          "distintos": 3134,
+          "tipo": "data_hora",
+          "min": "2023-10-09 22:48:24",
+          "max": "2026-10-31 23:00:00",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        },
+        "tipo_encerramento": {
+          "dtype": "object",
+          "nulos": 3253,
+          "pct_nulos": 46.846,
+          "distintos": 2,
+          "tipo": "texto",
+          "valores": {
+            "voluntario": 2478,
+            "involuntario": 1213
+          }
+        },
+        "renovacao_automatica": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "1": 5185,
+            "0": 1759
+          }
+        },
+        "assinatura_anterior_id": {
+          "dtype": "Int64",
+          "nulos": 6000,
+          "pct_nulos": 86.406,
+          "distintos": 944,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 32.58,
+          "p25": 934.75,
+          "mediana": 2151.5,
+          "p75": 3444.5,
+          "p99": 6209.969999999998,
+          "max": 6772.0,
+          "media": 2339.6599576271187,
+          "negativos": 0,
+          "zeros": 0
+        }
+      },
+      "pk": [
+        "assinatura_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "assinatura_eventos": {
+      "linhas": 25825,
+      "colunas": {
+        "evento_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 25825,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 259.24,
+          "p25": 6457.0,
+          "mediana": 12913.0,
+          "p75": 19369.0,
+          "p99": 25566.76,
+          "max": 25825.0,
+          "media": 12913.0,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "assinatura_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6943,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 45.0,
+          "p25": 1239.0,
+          "mediana": 2693.0,
+          "p75": 4381.0,
+          "p99": 6767.759999999998,
+          "max": 6944.0,
+          "media": 2878.799651500484,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "tipo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 13,
+          "tipo": "texto",
+          "valores": {
+            "assinatura_criada": 6942,
+            "inadimplencia_iniciada": 4800,
+            "encerrada": 3691,
+            "inadimplencia_resolvida": 3560,
+            "cancelamento_solicitado": 2538,
+            "upgrade": 1629,
+            "reativada": 944,
+            "downgrade": 636,
+            "trial_iniciado": 362,
+            "metodo_pagamento_alterado": 312,
+            "trial_convertido": 223,
+            "membro_extra_adicionado": 146,
+            "membro_extra_removido": 42
+          }
+        },
+        "ocorrido_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 23524,
+          "tipo": "data_hora",
+          "min": "2023-10-01 03:12:11",
+          "max": "2026-10-31 23:36:46",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        },
+        "plano_anterior_id": {
+          "dtype": "Int64",
+          "nulos": 23560,
+          "pct_nulos": 91.229,
+          "distintos": 3,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 2.0,
+          "p75": 2.0,
+          "p99": 3.0,
+          "max": 3.0,
+          "media": 1.7911699779249448,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "plano_novo_id": {
+          "dtype": "Int64",
+          "nulos": 15674,
+          "pct_nulos": 60.693,
+          "distintos": 3,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 2.0,
+          "p75": 3.0,
+          "p99": 3.0,
+          "max": 3.0,
+          "media": 1.911338784356221,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "origem": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 4,
+          "tipo": "texto",
+          "valores": {
+            "sistema": 12636,
+            "web": 9126,
+            "app": 3838,
+            "suporte": 225
+          }
+        }
+      },
+      "pk": [
+        "evento_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "faturas": {
+      "linhas": 60835,
+      "colunas": {
+        "fatura_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 60835,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 609.34,
+          "p25": 15209.5,
+          "mediana": 30418.0,
+          "p75": 45626.5,
+          "p99": 60226.659999999996,
+          "max": 60837.0,
+          "media": 30418.000098627435,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "assinatura_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6803,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 43.0,
+          "p25": 1192.0,
+          "mediana": 2392.0,
+          "p75": 3953.0,
+          "p99": 6506.659999999996,
+          "max": 6944.0,
+          "media": 2642.4551984877126,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "conta_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5900,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 36.0,
+          "p25": 1006.0,
+          "mediana": 2051.0,
+          "p75": 3376.0,
+          "p99": 5618.0,
+          "max": 5998.0,
+          "media": 2261.50876962275,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "preco_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 18,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 9.0,
+          "mediana": 13.0,
+          "p75": 15.0,
+          "p99": 17.0,
+          "max": 18.0,
+          "media": 11.961354483438809,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "cupom_resgate_id": {
+          "dtype": "Int64",
+          "nulos": 56302,
+          "pct_nulos": 92.549,
+          "distintos": 2287,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 19.0,
+          "p25": 551.0,
+          "mediana": 1071.0,
+          "p75": 1647.0,
+          "p99": 2241.6800000000003,
+          "max": 2289.0,
+          "media": 1096.602911978822,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "periodo_inicio": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1123,
+          "tipo": "data",
+          "min": "2023-10-01",
+          "max": "2026-10-31"
+        },
+        "periodo_fim": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1311,
+          "tipo": "data",
+          "min": "2023-10-31",
+          "max": "2027-10-30"
+        },
+        "emitida_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 60697,
+          "tipo": "data_hora",
+          "min": "2023-10-01 03:15:13",
+          "max": "2026-10-31 23:34:41",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        },
+        "vencimento_em": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1124,
+          "tipo": "data",
+          "min": "2023-10-01",
+          "max": "2026-11-03"
+        },
+        "valor_bruto": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 18,
+          "tipo": "numerico",
+          "min": 18.9,
+          "p01": 18.9,
+          "p25": 22.9,
+          "mediana": 47.9,
+          "p75": 59.9,
+          "p99": 209.0,
+          "max": 649.0,
+          "media": 47.66607873756884,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "valor_desconto": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 44,
+          "tipo": "numerico",
+          "min": 0.0,
+          "p01": 0.0,
+          "p25": 0.0,
+          "mediana": 0.0,
+          "p75": 0.0,
+          "p99": 32.45,
+          "max": 239.5,
+          "media": 1.4246259554532752,
+          "negativos": 0,
+          "zeros": 56302
+        },
+        "valor_membro_extra": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "numerico",
+          "min": 0.0,
+          "p01": 0.0,
+          "p25": 0.0,
+          "mediana": 0.0,
+          "p75": 0.0,
+          "p99": 13.9,
+          "max": 13.9,
+          "media": 0.2050546560368209,
+          "negativos": 0,
+          "zeros": 59920
+        },
+        "valor_total": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 66,
+          "tipo": "numerico",
+          "min": 0.0,
+          "p01": 9.45,
+          "p25": 22.9,
+          "mediana": 44.9,
+          "p75": 59.9,
+          "p99": 209.0,
+          "max": 662.9,
+          "media": 46.44650743815237,
+          "negativos": 0,
+          "zeros": 304
+        },
+        "status": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5,
+          "tipo": "texto",
+          "valores": {
+            "paga": 59434,
+            "vencida": 1213,
+            "estornada": 85,
+            "reembolsada": 61,
+            "aberta": 42
+          }
+        }
+      },
+      "pk": [
+        "fatura_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "pagamentos": {
+      "linhas": 66090,
+      "colunas": {
+        "pagamento_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 66090,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 661.89,
+          "p25": 16523.25,
+          "mediana": 33045.5,
+          "p75": 49567.75,
+          "p99": 65429.11,
+          "max": 66090.0,
+          "media": 33045.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "fatura_id": {
+          "dtype": "Int64",
+          "nulos": 98,
+          "pct_nulos": 0.148,
+          "distintos": 60581,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 625.91,
+          "p25": 15253.75,
+          "mediana": 30491.5,
+          "p75": 45675.25,
+          "p99": 60190.09,
+          "max": 60835.0,
+          "media": 30465.926491089827,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "conta_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5899,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 38.0,
+          "p25": 1008.0,
+          "mediana": 2061.0,
+          "p75": 3380.0,
+          "p99": 5616.0,
+          "max": 5998.0,
+          "media": 2264.6240581025872,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "metodo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "texto",
+          "valores": {
+            "cartao": 49957,
+            "pix": 10530,
+            "boleto": 5603
+          }
+        },
+        "tipo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3,
+          "tipo": "texto",
+          "valores": {
+            "cobranca": 65944,
+            "chargeback": 85,
+            "reembolso": 61
+          }
+        },
+        "tentativa": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 4,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 1.0,
+          "p75": 1.0,
+          "p99": 4.0,
+          "max": 4.0,
+          "media": 1.132259040702073,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "processado_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 65989,
+          "tipo": "data_hora",
+          "min": "2023-10-01 11:01:35",
+          "max": "2026-10-31 23:58:22",
+          "antes_2023_10": 0,
+          "depois_2026_10": 0
+        },
+        "valor_brl": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 79,
+          "tipo": "numerico",
+          "min": -64.9,
+          "p01": 0.0,
+          "p25": 22.9,
+          "mediana": 44.9,
+          "p75": 59.9,
+          "p99": 209.0,
+          "max": 662.9,
+          "media": 45.76572401270993,
+          "negativos": 146,
+          "zeros": 604
+        },
+        "status": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 5,
+          "tipo": "texto",
+          "valores": {
+            "aprovado": 59734,
+            "recusado": 5774,
+            "expirado": 436,
+            "contestado": 85,
+            "processado": 61
+          }
+        },
+        "codigo_recusa": {
+          "dtype": "object",
+          "nulos": 60316,
+          "pct_nulos": 91.263,
+          "distintos": 5,
+          "tipo": "texto",
+          "valores": {
+            "saldo_insuficiente": 2423,
+            "cartao_expirado": 1367,
+            "nao_autorizado": 1037,
+            "erro_emissor": 580,
+            "suspeita_fraude": 367
+          }
+        }
+      },
+      "pk": [
+        "pagamento_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "titulos": {
+      "linhas": 3000,
+      "colunas": {
+        "titulo_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3000,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 30.990000000000002,
+          "p25": 750.75,
+          "mediana": 1500.5,
+          "p75": 2250.25,
+          "p99": 2970.0099999999998,
+          "max": 3000.0,
+          "media": 1500.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "tipo": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "texto",
+          "valores": {
+            "filme": 2300,
+            "serie": 700
+          }
+        },
+        "nome": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3000,
+          "tipo": "texto",
+          "top5": {
+            "O Relógio de Toju": 1,
+            "Ribeira Lócri: O Relógio Submerso": 1,
+            "Calebe e o Abismo Distante": 1,
+            "Os Dias de Maysa Tutoni": 1,
+            "Vila Calóju": 1
+          },
+          "comprimento_mediano": 23.0
+        },
+        "ano_lancamento": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 54,
+          "tipo": "numerico",
+          "min": 1960.0,
+          "p01": 1987.0,
+          "p25": 2015.0,
+          "mediana": 2021.0,
+          "p75": 2023.0,
+          "p99": 2026.0,
+          "max": 2026.0,
+          "media": 2017.7423333333334,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "duracao_min": {
+          "dtype": "Int64",
+          "nulos": 700,
+          "pct_nulos": 23.333,
+          "distintos": 82,
+          "tipo": "numerico",
+          "min": 68.0,
+          "p01": 68.0,
+          "p25": 92.0,
+          "mediana": 104.0,
+          "p75": 114.0,
+          "p99": 140.0,
+          "max": 152.0,
+          "media": 103.52608695652174,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "classificacao_indicativa": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6,
+          "tipo": "texto",
+          "valores": {
+            "14": 812,
+            "12": 745,
+            "10": 447,
+            "16": 445,
+            "L": 436,
+            "18": 115
+          }
+        },
+        "original": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 2527,
+            "1": 473
+          }
+        },
+        "estudio_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 45,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 2.0,
+          "mediana": 5.0,
+          "p75": 15.0,
+          "p99": 43.0,
+          "max": 45.0,
+          "media": 10.146,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "idioma_original": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 6,
+          "tipo": "texto",
+          "valores": {
+            "en": 1226,
+            "pt": 1114,
+            "es": 255,
+            "ja": 156,
+            "ko": 155,
+            "fr": 94
+          }
+        },
+        "pais_origem": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14,
+          "tipo": "texto",
+          "valores": {
+            "BR": 959,
+            "US": 484,
+            "AU": 270,
+            "GB": 239,
+            "CA": 233,
+            "JP": 156,
+            "PT": 155,
+            "KR": 155,
+            "MX": 71,
+            "ES": 66,
+            "CO": 64,
+            "AR": 54,
+            "FR": 52,
+            "BE": 42
+          }
+        },
+        "sinopse": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1691,
+          "tipo": "texto",
+          "top5": {
+            "Uma estudante tenta proteger uma conspiração local.": 7,
+            "Uma família inteira se envolve com um segredo de família.": 6,
+            "Uma médica plantonista precisa esconder uma carta antiga.": 5,
+            "Uma estudante investiga uma herança disputada.": 5,
+            "Uma médica plantonista herda uma criatura misteriosa.": 5
+          },
+          "comprimento_mediano": 53.0
+        }
+      },
+      "pk": [
+        "titulo_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "episodios": {
+      "linhas": 24236,
+      "colunas": {
+        "episodio_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 24236,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 243.35,
+          "p25": 6059.75,
+          "mediana": 12118.5,
+          "p75": 18177.25,
+          "p99": 23993.65,
+          "max": 24236.0,
+          "media": 12118.5,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "titulo_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 700,
+          "tipo": "numerico",
+          "min": 2.0,
+          "p01": 42.0,
+          "p25": 728.0,
+          "mediana": 1461.0,
+          "p75": 2288.0,
+          "p99": 2992.0,
+          "max": 3000.0,
+          "media": 1502.42449249051,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "temporada": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 11,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 1.0,
+          "mediana": 2.0,
+          "p75": 4.0,
+          "p99": 8.0,
+          "max": 11.0,
+          "media": 2.676060406007592,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "numero": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 26,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 1.0,
+          "p25": 3.0,
+          "mediana": 6.0,
+          "p75": 9.0,
+          "p99": 22.0,
+          "max": 26.0,
+          "media": 6.702756230401056,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "nome": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 89,
+          "tipo": "texto",
+          "top5": {
+            "Episódio 3": 827,
+            "Episódio 1": 824,
+            "Episódio 2": 818,
+            "Episódio 4": 810,
+            "Episódio 5": 792
+          },
+          "comprimento_mediano": 10.0
+        },
+        "duracao_min": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 55,
+          "tipo": "numerico",
+          "min": 11.0,
+          "p01": 12.0,
+          "p25": 25.0,
+          "mediana": 41.0,
+          "p75": 49.0,
+          "p99": 61.0,
+          "max": 65.0,
+          "media": 37.56044726852616,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "disponivel_desde": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 677,
+          "tipo": "data_hora",
+          "min": "2020-01-25 07:00:00",
+          "max": "2026-10-24 07:00:00",
+          "antes_2023_10": 15577,
+          "depois_2026_10": 0
+        }
+      },
+      "pk": [
+        "episodio_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "sessoes_app": {
+      "linhas": 1046532,
+      "colunas": {
+        "sessao_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1046532,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 10466.31,
+          "p25": 262680.75,
+          "mediana": 524963.5,
+          "p75": 787689.25,
+          "p99": 1038856.69,
+          "max": 1049322.0,
+          "media": 524999.3780763512,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "perfil_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14627,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 40.0,
+          "p25": 2153.0,
+          "mediana": 4691.0,
+          "p75": 8198.0,
+          "p99": 14177.0,
+          "max": 15523.0,
+          "media": 5395.144866091051,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "dispositivo_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 13676,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 34.0,
+          "p25": 1996.0,
+          "mediana": 4396.0,
+          "p75": 7773.0,
+          "p99": 13477.0,
+          "max": 14741.0,
+          "media": 5101.039652872535,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "versao_app": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14,
+          "tipo": "texto",
+          "valores": {
+            "6.1.0": 196288,
+            "6.0.0": 139035,
+            "5.3.0": 116339,
+            "6.2.0": 106064,
+            "5.1.0": 102359,
+            "5.2.0": 94276,
+            "5.0.0": 86012,
+            "4.5.0": 56080,
+            "4.4.0": 42354,
+            "4.3.1": 41968,
+            "4.2.0": 24544,
+            "4.1.0": 18755,
+            "4.3.0": 17538,
+            "4.0.0": 4920
+          }
+        },
+        "inicio_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1035366,
+          "tipo": "data_hora",
+          "min": "2023-10-01 21:26:17",
+          "max": "2026-11-01 03:49:31",
+          "antes_2023_10": 0,
+          "depois_2026_10": 473
+        },
+        "fim_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1036121,
+          "tipo": "data_hora",
+          "min": "2023-10-01 23:10:40",
+          "max": "2026-11-02 01:21:11",
+          "antes_2023_10": 0,
+          "depois_2026_10": 705
+        },
+        "ip": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 217728,
+          "tipo": "texto",
+          "top5": {
+            "10.42.43.220": 1085,
+            "10.41.141.165": 987,
+            "10.40.239.110": 802,
+            "10.153.58.5": 793,
+            "10.113.20.135": 685
+          },
+          "comprimento_mediano": 13.0
+        },
+        "regiao": {
+          "dtype": "object",
+          "nulos": 62009,
+          "pct_nulos": 5.925,
+          "distintos": 5,
+          "tipo": "texto",
+          "valores": {
+            "Sudeste": 413699,
+            "Nordeste": 257047,
+            "Sul": 145461,
+            "Norte": 89920,
+            "Centro-Oeste": 78396
+          }
+        }
+      },
+      "pk": [
+        "sessao_id"
+      ],
+      "pk_duplicadas": 0
+    },
+    "reproducoes": {
+      "linhas": 1168273,
+      "colunas": {
+        "reproducao_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1168273,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 11683.72,
+          "p25": 292069.0,
+          "mediana": 584137.0,
+          "p75": 876205.0,
+          "p99": 1156590.28,
+          "max": 1168273.0,
+          "media": 584137.0,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "perfil_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14168,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 23.0,
+          "p25": 1692.0,
+          "mediana": 4086.0,
+          "p75": 7456.0,
+          "p99": 14010.280000000028,
+          "max": 15518.0,
+          "media": 4873.727266657707,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "sessao_id": {
+          "dtype": "Int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 757967,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 12973.159999999998,
+          "p25": 312274.0,
+          "mediana": 588641.0,
+          "p75": 830521.0,
+          "p99": 1041490.28,
+          "max": 1049322.0,
+          "media": 566223.0458009386,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "dispositivo_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 13128,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 19.0,
+          "p25": 1582.0,
+          "mediana": 3816.0,
+          "p75": 7074.0,
+          "p99": 13317.280000000028,
+          "max": 14737.0,
+          "media": 4604.569780350997,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "titulo_id": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 3000,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 24.0,
+          "p25": 619.0,
+          "mediana": 1395.0,
+          "p75": 2226.0,
+          "p99": 2945.0,
+          "max": 3000.0,
+          "media": 1448.6438691983808,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "episodio_id": {
+          "dtype": "Int64",
+          "nulos": 616469,
+          "pct_nulos": 52.768,
+          "distintos": 18011,
+          "tipo": "numerico",
+          "min": 1.0,
+          "p01": 245.0,
+          "p25": 4018.0,
+          "mediana": 10541.0,
+          "p75": 17748.0,
+          "p99": 23682.0,
+          "max": 24236.0,
+          "media": 11321.819140491914,
+          "negativos": 0,
+          "zeros": 0
+        },
+        "inicio_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 1154118,
+          "tipo": "data_hora",
+          "min": "2023-10-01 21:30:26",
+          "max": "2026-11-01 23:25:47",
+          "antes_2023_10": 0,
+          "depois_2026_10": 1066
+        },
+        "fim_em": {
+          "dtype": "datetime64[ms]",
+          "nulos": 2809,
+          "pct_nulos": 0.24,
+          "distintos": 1151572,
+          "tipo": "data_hora",
+          "min": "2023-10-01 23:09:34",
+          "max": "2026-11-02 01:19:51",
+          "antes_2023_10": 0,
+          "depois_2026_10": 1268
+        },
+        "segundos_assistidos": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 19039,
+          "tipo": "numerico",
+          "min": -3579000.0,
+          "p01": 10.0,
+          "p25": 1531.0,
+          "mediana": 3302.0,
+          "p75": 7058.0,
+          "p99": 7125000.0,
+          "max": 25509000.0,
+          "media": 727609.5303469308,
+          "negativos": 559,
+          "zeros": 4443
+        },
+        "percentual_concluido": {
+          "dtype": "float64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 11944,
+          "tipo": "numerico",
+          "min": 0.0,
+          "p01": 0.17,
+          "p25": 48.73,
+          "mediana": 95.07,
+          "p75": 97.63,
+          "p99": 100.0,
+          "max": 139.98,
+          "media": 75.03443780691673,
+          "negativos": 0,
+          "zeros": 6789
+        },
+        "qualidade_video": {
+          "dtype": "object",
+          "nulos": 10911,
+          "pct_nulos": 0.934,
+          "distintos": 4,
+          "tipo": "texto",
+          "valores": {
+            "1080p": 455132,
+            "720p": 346391,
+            "4k": 223486,
+            "480p": 132353
+          }
+        },
+        "eventos_buffering": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 15,
+          "tipo": "numerico",
+          "min": 0.0,
+          "p01": 0.0,
+          "p25": 0.0,
+          "mediana": 0.0,
+          "p75": 1.0,
+          "p99": 3.0,
+          "max": 16.0,
+          "media": 0.3553364667333748,
+          "negativos": 0,
+          "zeros": 854468
+        },
+        "origem_autoplay": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 1050737,
+            "1": 117536
+          }
+        },
+        "origem_recomendacao": {
+          "dtype": "int64",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 2,
+          "tipo": "flag",
+          "valores": {
+            "0": 760711,
+            "1": 407562
+          }
+        },
+        "versao_app": {
+          "dtype": "object",
+          "nulos": 0,
+          "pct_nulos": 0.0,
+          "distintos": 14,
+          "tipo": "texto",
+          "valores": {
+            "6.1.0": 255138,
+            "6.0.0": 165740,
+            "6.2.0": 140182,
+            "5.3.0": 129353,
+            "5.1.0": 104076,
+            "5.2.0": 99370,
+            "5.0.0": 81814,
+            "4.5.0": 53231,
+            "4.4.0": 39702,
+            "4.3.1": 38712,
+            "4.2.0": 22710,
+            "4.1.0": 17562,
+            "4.3.0": 16461,
+            "4.0.0": 4222
+          }
+        }
+      },
+      "pk": [
+        "reproducao_id"
+      ],
+      "pk_duplicadas": 0
+    }
+  },
+  "integridade": [
+    {
+      "de": "precos.plano_id",
+      "para": "planos.plano_id",
+      "preenchidos": 18,
+      "orfaos": 0,
+      "nulos": 2
+    },
+    {
+      "de": "contas.canal_aquisicao_id",
+      "para": "canais.canal_id",
+      "preenchidos": 6000,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "contas.indicada_por_conta_id",
+      "para": "contas.conta_id",
+      "preenchidos": 532,
+      "orfaos": 0,
+      "nulos": 5468
+    },
+    {
+      "de": "perfis.conta_id",
+      "para": "contas.conta_id",
+      "preenchidos": 15525,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "dispositivos.conta_id",
+      "para": "contas.conta_id",
+      "preenchidos": 14745,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "assinaturas.conta_id",
+      "para": "contas.conta_id",
+      "preenchidos": 6944,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "assinaturas.plano_id",
+      "para": "planos.plano_id",
+      "preenchidos": 6944,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "assinaturas.assinatura_anterior_id",
+      "para": "assinaturas.assinatura_id",
+      "preenchidos": 944,
+      "orfaos": 0,
+      "nulos": 6000
+    },
+    {
+      "de": "assinatura_eventos.assinatura_id",
+      "para": "assinaturas.assinatura_id",
+      "preenchidos": 25825,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "faturas.assinatura_id",
+      "para": "assinaturas.assinatura_id",
+      "preenchidos": 60835,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "faturas.preco_id",
+      "para": "precos.preco_id",
+      "preenchidos": 60835,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "pagamentos.fatura_id",
+      "para": "faturas.fatura_id",
+      "preenchidos": 65992,
+      "orfaos": 0,
+      "nulos": 98
+    },
+    {
+      "de": "pagamentos.conta_id",
+      "para": "contas.conta_id",
+      "preenchidos": 66090,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "episodios.titulo_id",
+      "para": "titulos.titulo_id",
+      "preenchidos": 24236,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "sessoes_app.perfil_id",
+      "para": "perfis.perfil_id",
+      "preenchidos": 1046532,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "sessoes_app.dispositivo_id",
+      "para": "dispositivos.dispositivo_id",
+      "preenchidos": 1046532,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "reproducoes.perfil_id",
+      "para": "perfis.perfil_id",
+      "preenchidos": 1168273,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "reproducoes.sessao_id",
+      "para": "sessoes_app.sessao_id",
+      "preenchidos": 1168273,
+      "orfaos": 2874,
+      "nulos": 0
+    },
+    {
+      "de": "reproducoes.dispositivo_id",
+      "para": "dispositivos.dispositivo_id",
+      "preenchidos": 1168273,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "reproducoes.titulo_id",
+      "para": "titulos.titulo_id",
+      "preenchidos": 1168273,
+      "orfaos": 0,
+      "nulos": 0
+    },
+    {
+      "de": "reproducoes.episodio_id",
+      "para": "episodios.episodio_id",
+      "preenchidos": 551804,
+      "orfaos": 0,
+      "nulos": 616469
+    }
+  ],
+  "sequencias_assinatura": {
+    "transicoes": {
+      "encerrada -> FIM": 3595,
+      "inadimplencia_iniciada -> inadimplencia_resolvida": 3501,
+      "cancelamento_solicitado -> encerrada": 2381,
+      "assinatura_criada -> inadimplencia_iniciada": 1990,
+      "inadimplencia_resolvida -> inadimplencia_iniciada": 1534,
+      "assinatura_criada -> FIM": 1268,
+      "inadimplencia_iniciada -> encerrada": 1180,
+      "assinatura_criada -> cancelamento_solicitado": 1049,
+      "assinatura_criada -> reativada": 944,
+      "inadimplencia_resolvida -> FIM": 813,
+      "assinatura_criada -> upgrade": 754,
+      "upgrade -> FIM": 555,
+      "inadimplencia_resolvida -> cancelamento_solicitado": 539,
+      "upgrade -> inadimplencia_iniciada": 515,
+      "assinatura_criada -> trial_iniciado": 362,
+      "inadimplencia_resolvida -> upgrade": 357,
+      "reativada -> cancelamento_solicitado": 300,
+      "reativada -> inadimplencia_iniciada": 275,
+      "assinatura_criada -> downgrade": 231,
+      "reativada -> FIM": 228,
+      "trial_iniciado -> trial_convertido": 223,
+      "downgrade -> inadimplencia_iniciada": 191,
+      "upgrade -> cancelamento_solicitado": 189,
+      "upgrade -> upgrade": 164,
+      "upgrade -> downgrade": 158,
+      "cancelamento_solicitado -> FIM": 156,
+      "downgrade -> upgrade": 155,
+      "inadimplencia_resolvida -> metodo_pagamento_alterado": 145,
+      "downgrade -> FIM": 142,
+      "trial_iniciado -> cancelamento_solicitado": 139,
+      "inadimplencia_resolvida -> downgrade": 130,
+      "assinatura_criada -> metodo_pagamento_alterado": 116,
+      "metodo_pagamento_alterado -> FIM": 105,
+      "encerrada -> cancelamento_solicitado": 96,
+      "downgrade -> cancelamento_solicitado": 96,
+      "metodo_pagamento_alterado -> inadimplencia_iniciada": 89,
+      "inadimplencia_iniciada -> assinatura_criada": 89,
+      "assinatura_criada -> membro_extra_adicionado": 88,
+      "trial_convertido -> inadimplencia_iniciada": 81,
+      "assinatura_criada -> encerrada": 77
+    },
+    "primeiro_evento": {
+      "assinatura_criada": 6827,
+      "inadimplencia_iniciada": 89,
+      "membro_extra_adicionado": 26,
+      "upgrade": 1
+    },
+    "caminhos_mais_comuns": {
+      "assinatura_criada": 1263,
+      "assinatura_criada > cancelamento_solicitado > encerrada": 1018,
+      "assinatura_criada > inadimplencia_iniciada > encerrada": 497,
+      "assinatura_criada > reativada > cancelamento_solicitado > encerrada": 291,
+      "assinatura_criada > inadimplencia_iniciada > inadimplencia_resolvida": 288,
+      "assinatura_criada > upgrade": 245,
+      "assinatura_criada > inadimplencia_iniciada > inadimplencia_resolvida > cancelamento_solicitado > encerrada": 243,
+      "assinatura_criada > reativada": 228,
+      "assinatura_criada > inadimplencia_iniciada > inadimplencia_resolvida > inadimplencia_iniciada > encerrada": 151,
+      "assinatura_criada > trial_iniciado > cancelamento_solicitado > encerrada": 139,
+      "assinatura_criada > upgrade > cancelamento_solicitado > encerrada": 101,
+      "assinatura_criada > inadimplencia_iniciada > inadimplencia_resolvida > inadimplencia_iniciada > inadimplencia_resolvida": 99
+    },
+    "status_foto_final": {
+      "encerrada": 3691,
+      "ativa": 3158,
+      "cancelamento_agendado": 61,
+      "inadimplente": 34
+    },
+    "tipo_encerramento": {
+      "None": 3253,
+      "voluntario": 2478,
+      "involuntario": 1213
+    },
+    "reativacoes": 944,
+    "dias_ate_reativar": {
+      "mediana": 49.72372685185185,
+      "p10": 8.633914351851852,
+      "p90": 259.6323194444446,
+      "min": -0.46880787037037036
+    },
+    "assinaturas_por_conta": {
+      "1": 5200,
+      "2": 676,
+      "3": 106,
+      "4": 16,
+      "5": 2
+    },
+    "sobreposicoes_nativas": 5,
+    "eventos_antes_da_criacao_nativos": 115
+  },
+  "imperfeicoes_nativas": {
+    "repro_segundos_negativos": 559,
+    "repro_segundos_zero": 4443,
+    "repro_maior_que_conteudo": 250877,
+    "repro_fim_nulo": 2809,
+    "repro_qualidade_nula": 10911,
+    "repro_ordem_1000x_app6_movel": 248281,
+    "repro_ordem_1000x_fora_app6_movel": 0,
+    "dispositivo_tipo_variantes": {
+      "celular": 6161,
+      "tv": 4719,
+      "web": 2196,
+      "tablet": 1311,
+      "Celular": 53,
+      "smartphone": 52,
+      "tv ": 47,
+      "mobile": 45,
+      "Smart TV": 42,
+      "TV": 33,
+      "navegador": 23,
+      "Web": 22,
+      "WEB": 13,
+      "TABLET": 11,
+      "tablet ": 10,
+      "Tablet": 7
+    },
+    "uf_fora_do_padrao": 194,
+    "contas_email_interno": 33,
+    "contas_email_qa": 11,
+    "faturas_pagas_sem_pagamento": 233,
+    "pagamentos_sem_fatura": 98,
+    "sessoes_regiao_nula": 62009,
+    "sessoes_ip_interno": 848334
+  },
+  "uso": {
+    "horas_por_perfil_dia": {
+      "count": 687321.0,
+      "mean": 3.3442185508825,
+      "std": 7.96988877423111,
+      "min": 0.0,
+      "50%": 1.4694444444444446,
+      "90%": 6.0,
+      "99%": 30.0,
+      "99.9%": 114.0,
+      "max": 300.0
+    },
+    "assimetria_horas_perfil_dia": 10.974755368791508,
+    "horas_totais_por_dia_semana": {
+      "0": 1926.3688906142165,
+      "1": 1855.5617149758455,
+      "2": 1858.2559661835746,
+      "3": 1878.0758419599722,
+      "4": 2054.0885593512767,
+      "5": 2383.766102484472,
+      "6": 2306.2764780521265
+    },
+    "top_dias_plataforma": {
+      "2026-07-11": 9338.354166666666,
+      "2026-10-25": 9377.153055555556,
+      "2026-08-29": 9415.439166666667,
+      "2026-10-04": 9469.305555555555,
+      "2026-10-31": 9586.761111111111,
+      "2026-07-25": 10122.424166666666,
+      "2026-10-18": 10208.168333333333,
+      "2026-10-17": 10358.295
+    }
+  }
+}

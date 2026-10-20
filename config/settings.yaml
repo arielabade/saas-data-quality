@@ -1,0 +1,57 @@
+# Configuração do pipeline. Valores ${VAR:-padrão} vêm de variáveis de ambiente (ou do .env).
+# Nenhuma credencial fica aqui: a senha do MySQL só existe no ambiente (MYSQL_PASSWORD).
+
+source:
+  dir: ${DQ_SOURCE_DIR:-../../streaming}   # base fonte, somente leitura
+  scale: small                             # escala do gerador (small ≈ 6 mil contas)
+  seed: 20231001                           # semente padrão do gerador da fonte
+
+profile: ${DQ_PROFILE:-full}
+
+profiles:
+  full:
+    sample_contas: null                    # todas as contas
+  ci:
+    sample_contas: 350                     # amostra para CI e teste de ponta a ponta
+    sample_seed: 7
+
+paths:
+  generated: data/generated               # saída do gerador (Parquet + CSV)
+  source: data/source                      # snapshot extraído do MySQL: a base de referência
+  raw: data/raw                            # base suja (com defeitos injetados)
+  raw_reference: data/raw_reference        # mesma camada raw, sem defeitos (para medir a verdade)
+  defect_log: data/defect_log              # registro de defeitos: SÓ corrupt/ e evaluate/ conhecem
+  runs: data/runs                          # uma pasta por variante de ETL
+  reports: reports                         # relatórios versionados (resultados)
+  profile_out: reports/profile
+
+mysql:
+  host: ${MYSQL_HOST:-127.0.0.1}
+  port: ${MYSQL_PORT:-3327}
+  user: ${MYSQL_USER:-root}
+  database: cinelume
+  # a senha é lida de MYSQL_PASSWORD no momento da conexão
+
+extract:
+  backend: ${DQ_EXTRACT_BACKEND:-mysql}    # mysql | parquet (parquet = direto do gerador, usado no CI)
+  chunk_rows: 200000
+  tables:
+    - canais
+    - planos
+    - precos
+    - contas
+    - perfis
+    - dispositivos
+    - assinaturas
+    - assinatura_eventos
+    - faturas
+    - pagamentos
+    - titulos
+    - episodios
+    - sessoes_app
+    - reproducoes
+
+analysis:
+  fuso_padrao: America/Sao_Paulo          # fuso usado quando a UF não é conhecida
+  inicio: 2023-10-01
+  fim: 2026-10-31

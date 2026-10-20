@@ -1,0 +1,73 @@
+# Parâmetros do injetor de defeitos (src/dq/corrupt). Mesma semente => mesma base suja.
+# Taxas são frações das linhas/entidades elegíveis. Cada defeito vai para data/defect_log/.
+seed: 20261019
+
+defeitos:
+  # --- assinatura e cobrança
+  eventos_fora_de_ordem:         # cancelamento/encerramento registrado antes da criação
+    taxa_assinaturas: 0.04       # entre as assinaturas que têm cancelamento ou encerramento
+  assinaturas_sobrepostas:       # upgrade gravado como assinatura nova sem fechar a anterior
+    taxa_contas: 0.02            # entre contas com assinatura ainda ativa
+  webhook_duplicado:             # mesmo pagamento aprovado entregue 2+ vezes pelo gateway
+    taxa: 0.03
+    atraso_max_seg: 180
+  retentativa_duplicada:         # tentativa recusada registrada de novo como pagamento separado
+    taxa: 0.05
+    atraso_max_seg: 900
+  preco_divergente:              # fatura com preço de tabela antiga (cache de preço vencido)
+    taxa: 0.012
+
+  # --- uso
+  sessao_absurda:                # player aberto a noite toda: reprodução de 10 a 30 h
+    taxa: 0.002
+    horas_min: 10
+    horas_max: 30
+  tempo_negativo:
+    taxa: 0.0015
+  tempo_maior_que_conteudo:
+    taxa: 0.003
+    fator_min: 1.5
+    fator_max: 8
+  replay_lote:                   # pipeline reprocessa um lote: horas inteiras duplicadas com ids novos
+    dias: 3
+    horas_por_dia: 6
+  fuso_misturado:                # app web grava hora local de Brasília sem offset numa janela de versões
+    plataforma: web
+    inicio: "2025-02-04"
+    fim: "2025-08-19"
+  relogio_errado:                # aparelho com relógio errado (horas, dias ou reset para 2000-01-01)
+    taxa_dispositivos: 0.012
+  atrasados:                     # sincronização offline do celular: chega 1 a 20 dias depois
+    taxa_movel: 0.03
+    dias_min: 1
+    dias_max: 20
+  troca_dispositivo:             # reinstalação gera dispositivo_id novo para o mesmo aparelho
+    taxa_dispositivos: 0.04
+
+  # --- cadastro
+  contas_teste:                  # contas internas/QA clonadas de clientes reais, com sinais sutis
+    n: 40
+  nulo_uf_tv:                    # UF nula quando o cadastro foi feito pela TV (MAR)
+    taxa: 0.7
+  orfaos:
+    pagamentos: 0.002            # pagamento apontando para fatura inexistente
+    sessoes: 0.001               # sessão (e suas reproduções) de perfil inexistente
+
+  # --- padrões anômalos por conta (alvo do Isolation Forest)
+  bots:
+    n_contas: 15
+    reproducoes_por_dia: 60
+  compartilhamento_excedente:    # mais telas simultâneas que o plano permite, de outras regiões
+    n_contas: 30
+
+legitimos:                       # outliers VERDADEIROS: ficam no registro como "legítimo"
+  maratona_lancamento:           # estreia de série original: perfis maratonam a temporada
+    n_perfis: 250
+    dias_apos_estreia: 3
+  usuarios_intensos:             # muito uso, mas fisicamente possível (8 a 14 h/dia)
+    n_perfis: 25
+    dias: 20
+  pico_feriado:                  # Natal e Réveillon: mais reproduções em toda a base
+    fator: 0.35
+  compartilhamento_legitimo:     # membro extra pago, dentro do limite de telas do plano
+    n_contas: 30
