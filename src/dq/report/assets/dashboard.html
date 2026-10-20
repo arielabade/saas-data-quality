@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qualidade de Dados SaaS</title>
+<meta name="description" content="Como cada defeito de dados num ETL de streaming por assinatura muda MRR, churn e engajamento — e quais técnicas de limpeza acertam (dados simulados).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<style>
+  /* Tokens ABADE (Carbon, Ivory, Cobalt). Cobalt = o achado; cinzas = comparação; crimson = perda. */
+  :root {
+    --carbon: #050505; --ivory: #F6F5F0; --cobalt: #5B6CFF;
+    --bg: #F6F5F0; --surface: #FFFFFF; --ink: #050505; --muted: #5F656D;
+    --data: #A3A8AF; --data-soft: #D9DBDE; --line: #E4E2DA; --accent: #5B6CFF; --accent-ink: #3546D9;
+    --amber: #BD8620; --teal: #1F9B73; --loss: #C23A50; --grid: #ECEAE3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #050505; --surface: #111215; --ink: #F6F5F0; --muted: #9BA2AA;
+      --data: #5C626B; --data-soft: #2A2D33; --line: #24262B; --accent-ink: #9AA5FF; --loss: #E06A7E; --grid: #1D1F23;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #050505; --surface: #111215; --ink: #F6F5F0; --muted: #9BA2AA;
+    --data: #5C626B; --data-soft: #2A2D33; --line: #24262B; --accent-ink: #9AA5FF; --loss: #E06A7E; --grid: #1D1F23;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: Lato, "Helvetica Neue", Arial, sans-serif;
+         font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px 72px; }
+  header.top { display: flex; align-items: center; gap: 12px; padding: 22px 0 14px; }
+  .mark { width: 38px; height: 38px; border-radius: 10px; background: var(--carbon); display: grid; place-items: center; flex: none; }
+  .mark svg { width: 22px; height: 22px; }
+  .brand { font-weight: 900; letter-spacing: .1em; font-size: 12px; text-transform: uppercase; color: var(--muted); }
+  .brand b { color: var(--ink); }
+  .themebtn { margin-left: auto; font: inherit; font-size: 13px; border: 1px solid var(--line); background: var(--surface);
+              color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .warn { border: 1px solid var(--line); border-left: 4px solid var(--ink); background: var(--surface); border-radius: 10px;
+          padding: 10px 14px; font-size: 14px; color: var(--muted); margin-bottom: 36px; }
+  .warn strong { color: var(--ink); letter-spacing: .06em; margin-right: 6px; }
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  h1 { font-size: clamp(30px, 4.6vw, 46px); line-height: 1.1; font-weight: 900; margin: 0 0 18px; letter-spacing: -.015em; }
+  h1 .hl, h2 .hl { color: var(--accent-ink); }
+  h2 { font-size: clamp(22px, 2.8vw, 30px); line-height: 1.22; font-weight: 900; margin: 0 0 8px; letter-spacing: -.005em; }
+  h3 { font-size: 16px; margin: 26px 0 4px; }
+  .bigidea { font-size: 20px; line-height: 1.55; max-width: 800px; margin: 0 0 28px; }
+  .read { color: var(--muted); font-size: 15px; margin: 0 0 16px; max-width: 760px; }
+  section { margin-top: 72px; }
+  .chapter { display: flex; gap: 10px; align-items: baseline; }
+  .chapter .n { font-weight: 900; color: var(--accent-ink); font-size: 14px; letter-spacing: .1em; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .kpi { padding: 18px 16px 18px 0; }
+  .kpi + .kpi { padding-left: 16px; border-left: 1px solid var(--line); }
+  .kpi .v { font-size: 32px; font-weight: 900; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .kpi .v.hl { color: var(--accent-ink); }
+  .kpi .l { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  @media (max-width: 820px) { .kpis { grid-template-columns: 1fr 1fr; } .kpi:nth-child(3) { padding-left: 0; border-left: 0; }
+                              .kpi:nth-child(n+3) { border-top: 1px solid var(--line); } }
+  @media (max-width: 480px) { .kpis { grid-template-columns: 1fr; } .kpi + .kpi { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); } }
+  .chart { width: 100%; height: 380px; }
+  .chart.tall { height: 520px; }
+  .chart.short { height: 300px; }
+  .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+  .seg button { font: inherit; font-size: 13px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+                border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 7px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; white-space: normal; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+  td.good { color: var(--accent-ink); font-weight: 700; }
+  td.bad { color: var(--loss); font-weight: 700; }
+  .table-wrap { overflow-x: auto; margin-top: 8px; }
+  details.tv { margin-top: 6px; } details.tv > summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+  .cta { margin-top: 72px; background: var(--carbon); color: var(--ivory); border-radius: 18px; padding: 28px 26px; }
+  .cta h2 { color: var(--ivory); }
+  .cta p { color: #C9CDD2; max-width: 780px; }
+  .cta ol { margin: 14px 0 0; padding-left: 22px; } .cta li { margin: 10px 0; color: #E4E6E9; }
+  .cta .hl { color: #A7B0FF; }
+  details.appendix { margin-top: 48px; border-top: 1px solid var(--line); padding-top: 18px; }
+  details.appendix > summary { cursor: pointer; font-weight: 900; font-size: 20px; }
+  details.appendix li, details.appendix p { color: var(--muted); font-size: 15px; }
+  .note { font-size: 13px; color: var(--muted); }
+  footer { margin-top: 56px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5 3 21.5h4l1.9-4.3h6.2l1.9 4.3h4L12 2.5Zm-1.7 11.4L12 9.9l1.7 4Z" fill="#F6F5F0"/><circle cx="19" cy="5" r="2.2" fill="#5B6CFF"/></svg>
+    </div>
+    <div class="brand"><b>ABADE</b> · Qualidade de dados · Streaming por assinatura</div>
+    <button class="themebtn" id="themebtn" type="button">Tema</button>
+  </header>
+
+  <div class="warn" role="note"><strong>DADOS SIMULADOS</strong>Serviço de streaming fictício. Os defeitos foram injetados de propósito e registrados, por isso dá para medir cada técnica. O relatório demonstra o método, não descreve uma empresa real.</div>
+
+  <div class="kicker">Resumo</div>
+  <h1 id="h-headline"></h1>
+  <p class="bigidea" id="bigidea"></p>
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <div class="chapter"><span class="n">01</span><span class="kicker">Quanto da base estava suja</span></div>
+    <h2 id="h-dirty"></h2>
+    <p class="read" id="r-dirty"></p>
+    <div id="c-dirty" class="chart short" role="img" aria-label="Percentual de linhas com defeito por tabela"></div>
+    <details class="tv"><summary>Ver como tabela</summary><div class="table-wrap" id="t-dirty"></div></details>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="n">02</span><span class="kicker">O que cada técnica pegou e o que errou</span></div>
+    <h2 id="h-tech"></h2>
+    <p class="read" id="r-tech"></p>
+    <div class="seg" id="seg-tech" role="group" aria-label="Grupo de técnicas"></div>
+    <div id="c-tech" class="chart tall" role="img" aria-label="Precisão e recall por técnica"></div>
+    <div class="table-wrap" id="t-tech"></div>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="n">03</span><span class="kicker">Erro ou evento real</span></div>
+    <h2 id="h-real"></h2>
+    <p class="read" id="r-real"></p>
+    <div id="c-daily" class="chart" role="img" aria-label="Horas assistidas por dia com dias marcados"></div>
+    <h3 id="h-compose"></h3>
+    <p class="read" id="r-compose"></p>
+    <div id="c-compose" class="chart" role="img" aria-label="Composição do que cada detector marcou"></div>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="n">04</span><span class="kicker">Impacto em MRR, churn e engajamento</span></div>
+    <h2 id="h-impact"></h2>
+    <p class="read" id="r-impact"></p>
+    <div class="seg" id="seg-metric" role="group" aria-label="Métrica"></div>
+    <div id="c-impact" class="chart" role="img" aria-label="Métrica mensal: verdade, base suja sem limpeza e base limpa"></div>
+    <h3 id="h-wrong"></h3>
+    <p class="read" id="r-wrong"></p>
+    <div id="c-wrong" class="chart tall" role="img" aria-label="Erro causado por cada decisão errada"></div>
+    <details class="tv"><summary>Ver como tabela</summary><div class="table-wrap" id="t-wrong"></div></details>
+    <h3 id="h-model"></h3>
+    <p class="read" id="r-model"></p>
+    <div id="c-model" class="chart short" role="img" aria-label="Viés das features de churn sem limpeza"></div>
+  </section>
+
+  <div class="cta">
+    <div class="kicker" style="color:#9BA2AA">Recomendação</div>
+    <h2 id="h-rec"></h2>
+    <p id="r-rec"></p>
+    <ol id="l-rec"></ol>
+  </div>
+
+  <details class="appendix">
+    <summary>Método</summary>
+    <div id="method"></div>
+  </details>
+
+  <footer>Código, dados e decisões: <a href="https://github.com/arielabade/saas-data-quality">github.com/arielabade/saas-data-quality</a>. Dados simulados a partir de uma base sintética de streaming; nenhuma informação real.</footer>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (x, d = 1) => x == null || Number.isNaN(x) ? '—' : x.toLocaleString('pt-BR', {minimumFractionDigits: d, maximumFractionDigits: d});
+const pct = (x, d = 0) => x == null || Number.isNaN(x) ? '—' : fmt(100 * x, d) + '%';
+const sgn = (x, d = 1) => (x > 0 ? '+' : '') + fmt(x, d);
+const el = id => document.getElementById(id);
+
+function base(extra = {}) {
+  return Object.assign({
+    paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+    font: {family: 'Lato, Helvetica Neue, Arial, sans-serif', color: css('--ink'), size: 13},
+    margin: {l: 56, r: 16, t: 16, b: 44}, hovermode: 'closest',
+    hoverlabel: {font: {family: 'Lato'}, bgcolor: css('--surface'), bordercolor: css('--line')},
+    xaxis: {gridcolor: css('--grid'), linecolor: css('--line'), zeroline: false, tickfont: {color: css('--muted')}},
+    yaxis: {gridcolor: css('--grid'), linecolor: css('--line'), zeroline: false, tickfont: {color: css('--muted')}},
+    legend: {orientation: 'h', y: 1.1, x: 0, font: {color: css('--muted')}},
+  }, extra);
+}
+const cfg = {displayModeBar: false, responsive: true};
+
+function table(id, cols, rows) {
+  const h = '<table><thead><tr>' + cols.map(c => `<th>${c[0]}</th>`).join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + cols.map(c => { const v = c[1](r); return typeof v === 'object' ? `<td class="${v.c}">${v.t}</td>` : `<td>${v}</td>`; }).join('') + '</tr>').join('') +
+    '</tbody></table>';
+  el(id).innerHTML = h;
+}
+
+function seg(id, opts, onPick, initial) {
+  const box = el(id); box.innerHTML = '';
+  opts.forEach(([k, label]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.dataset.k = k;
+    b.setAttribute('aria-pressed', k === initial); b.onclick = () => { [...box.children].forEach(x => x.setAttribute('aria-pressed', x === b)); onPick(k); };
+    box.appendChild(b);
+  });
+  onPick(initial);
+}
+
+function text() {
+  const T = D.textos;
+  for (const [k, v] of Object.entries(T)) { const e = el(k); if (e) e.innerHTML = v; }
+  el('kpis').innerHTML = D.kpis.map(k => `<div class="kpi"><div class="v ${k.hl ? 'hl' : ''}">${k.v}</div><div class="l">${k.l}</div></div>`).join('');
+  el('l-rec').innerHTML = D.recomendacao.map(x => `<li>${x}</li>`).join('');
+  el('method').innerHTML = D.metodo;
+}
+
+function chartDirty() {
+  const r = D.base_suja.filter(x => x.linhas_com_defeito > 0).sort((a, b) => a.pct - b.pct);
+  Plotly.react('c-dirty', [{type: 'bar', orientation: 'h', y: r.map(x => x.tabela), x: r.map(x => x.pct),
+    marker: {color: css('--accent')}, text: r.map(x => fmt(x.pct, 1) + '%'), textposition: 'outside', cliponaxis: false,
+    textfont: {color: css('--muted')}, customdata: r.map(x => [x.linhas_com_defeito, x.linhas_raw, x.tipos]),
+    hovertemplate: '<b>%{y}</b><br>%{customdata[0]:,} de %{customdata[1]:,} linhas<br>%{customdata[2]}<extra></extra>'}],
+    base({margin: {l: 140, r: 48, t: 8, b: 36}, xaxis: Object.assign(base().xaxis, {ticksuffix: '%'}), showlegend: false}), cfg);
+  table('t-dirty', [['Tabela', x => x.tabela], ['Linhas no raw', x => x.linhas_raw.toLocaleString('pt-BR')],
+    ['Com defeito', x => x.linhas_com_defeito.toLocaleString('pt-BR')], ['%', x => fmt(x.pct, 2) + '%'], ['Defeitos', x => x.tipos]],
+    D.base_suja.filter(x => x.linhas_com_defeito > 0));
+}
+
+function chartTech(group) {
+  const r = D.deteccao.filter(x => group === 'todos' || x.grupo === group).slice().reverse();
+  const y = r.map(x => x.tecnica);
+  Plotly.react('c-tech', [
+    {type: 'bar', orientation: 'h', name: 'Precisão', y, x: r.map(x => 100 * x.precisao), marker: {color: css('--accent')},
+     hovertemplate: '<b>%{y}</b><br>Precisão %{x:.1f}%<extra></extra>'},
+    {type: 'bar', orientation: 'h', name: 'Recall', y, x: r.map(x => 100 * x.recall), marker: {color: css('--amber')},
+     hovertemplate: '<b>%{y}</b><br>Recall %{x:.1f}%<extra></extra>'},
+  ], base({barmode: 'group', bargap: 0.35, bargroupgap: 0.08, margin: {l: 290, r: 16, t: 30, b: 36},
+    xaxis: Object.assign(base().xaxis, {range: [0, 105], ticksuffix: '%'}), yaxis: Object.assign(base().yaxis, {automargin: true})}), cfg);
+  const rr = r.slice().reverse();
+  table('t-tech', [['Técnica', x => x.tecnica], ['Unidade', x => x.unidade], ['Marcados', x => x.marcados.toLocaleString('pt-BR')],
+    ['Precisão', x => ({t: pct(x.precisao, 1), c: x.precisao >= .9 ? 'good' : x.precisao < .5 ? 'bad' : ''})],
+    ['Recall', x => ({t: pct(x.recall, 1), c: x.recall >= .9 ? 'good' : x.recall < .5 ? 'bad' : ''})],
+    ['Legítimos derrubados', x => ({t: x.legitimos_derrubados.toLocaleString('pt-BR'), c: x.legitimos_derrubados > 0 ? 'bad' : ''})],
+    ['Nativos', x => x.nativos.toLocaleString('pt-BR')]], rr);
+}
+
+function chartDaily() {
+  const s = D.serie_diaria;
+  const pick = (dates) => { const ix = new Map(s.datas.map((d, i) => [d, i])); return dates.filter(d => ix.has(d)).map(d => [d, s.suja[ix.get(d)]]); };
+  const err = pick(s.marcados.filter(m => m.explicacao === 'erro provável').map(m => m.data));
+  const real = pick(s.marcados.filter(m => m.explicacao === 'estreia' || m.explicacao === 'feriado').map(m => m.data));
+  const naive = pick(s.z_simples);
+  Plotly.react('c-daily', [
+    {type: 'scatter', mode: 'lines', name: 'Horas por dia (base suja)', x: s.datas, y: s.suja, line: {color: css('--data'), width: 1.5},
+     hovertemplate: '%{x}<br>%{y:,.0f} h<extra></extra>'},
+    {type: 'scatter', mode: 'lines', name: 'Esperado (tendência + dia da semana)', x: s.datas, y: s.esperado, line: {color: css('--ink'), width: 1.5, dash: 'dot'},
+     hovertemplate: '%{x}<br>esperado %{y:,.0f} h<extra></extra>'},
+    {type: 'scatter', mode: 'markers', name: 'Marcado pelo z-score simples', x: naive.map(p => p[0]), y: naive.map(p => p[1]),
+     marker: {size: 9, color: 'rgba(0,0,0,0)', line: {color: css('--muted'), width: 1.5}}, hovertemplate: '%{x}: z-score simples<extra></extra>'},
+    {type: 'scatter', mode: 'markers', name: 'Sazonal: evento real (estreia/feriado)', x: real.map(p => p[0]), y: real.map(p => p[1]),
+     marker: {size: 10, color: css('--accent'), symbol: 'diamond', line: {color: css('--surface'), width: 2}}, hovertemplate: '%{x}: evento real<extra></extra>'},
+    {type: 'scatter', mode: 'markers', name: 'Sazonal: erro provável', x: err.map(p => p[0]), y: err.map(p => p[1]),
+     marker: {size: 11, color: css('--loss'), symbol: 'x', line: {color: css('--surface'), width: 1}}, hovertemplate: '%{x}: erro provável<extra></extra>'},
+  ], base({hovermode: 'x unified', legend: {orientation: 'h', y: 1.18, x: 0, font: {color: css('--muted'), size: 12}},
+    yaxis: Object.assign(base().yaxis, {title: {text: 'horas', font: {color: css('--muted')}}})}), cfg);
+}
+
+function chartCompose() {
+  const r = D.deteccao.filter(x => x.unidade === 'perfil-dia' || x.unidade === 'dia' || x.unidade === 'conta').slice().reverse();
+  const y = r.map(x => x.tecnica);
+  const tr = (name, key, color) => ({type: 'bar', orientation: 'h', name, y, x: r.map(x => x[key]), marker: {color, line: {color: css('--surface'), width: 2}},
+    hovertemplate: `<b>%{y}</b><br>${name}: %{x:,}<extra></extra>`});
+  Plotly.react('c-compose', [tr('Defeito (acerto)', 'acertos', css('--accent')), tr('Nativo da base', 'nativos', css('--data')),
+    tr('Falso positivo', 'falsos_positivos', css('--data-soft')), tr('Legítimo derrubado', 'legitimos_derrubados', css('--loss'))],
+    base({barmode: 'stack', barnorm: 'percent', margin: {l: 290, r: 16, t: 30, b: 36},
+      xaxis: Object.assign(base().xaxis, {ticksuffix: '%'}), yaxis: Object.assign(base().yaxis, {automargin: true})}), cfg);
+}
+
+function chartImpact(metric) {
+  const m = D.series[metric];
+  const tr = (v, name, color, dash, w) => ({type: 'scatter', mode: 'lines', name, x: m.meses, y: m[v], line: {color, width: w, dash},
+    hovertemplate: `${name}: %{y:,.${m.dec}f}${m.suf}<extra></extra>`});
+  Plotly.react('c-impact', [tr('verdade', 'Verdade (sem defeitos)', css('--ink'), 'dot', 2),
+    tr('ingenua', 'Base suja sem limpeza', css('--amber'), 'solid', 2), tr('limpa', 'Base suja limpa', css('--accent'), 'solid', 2.5)],
+    base({hovermode: 'x unified', yaxis: Object.assign(base().yaxis, {title: {text: m.label, font: {color: css('--muted')}}, ticksuffix: m.suf})}), cfg);
+  el('r-impact').innerHTML = m.leitura;
+}
+
+function chartWrong() {
+  const r = D.decisoes_erradas.slice().sort((a, b) => Math.abs(a.erro_medio) - Math.abs(b.erro_medio));
+  Plotly.react('c-wrong', [{type: 'bar', orientation: 'h', y: r.map(x => x.decisao), x: r.map(x => x.erro_medio),
+    marker: {color: r.map(x => x.erro_medio < 0 ? css('--loss') : css('--accent'))},
+    text: r.map(x => `${sgn(x.erro_medio, 1)} ${x.unidade} em ${x.metrica_mais_afetada}`), textposition: 'outside', cliponaxis: false,
+    textfont: {color: css('--muted'), size: 12},
+    hovertemplate: '<b>%{y}</b><br>%{text}<extra></extra>'}],
+    base({margin: {l: 300, r: 190, t: 8, b: 36}, showlegend: false, xaxis: Object.assign(base().xaxis, {zeroline: true, zerolinecolor: css('--muted')}),
+      yaxis: Object.assign(base().yaxis, {automargin: true})}), cfg);
+  table('t-wrong', [['Decisão', x => x.decisao], ['MRR', x => sgn(x.erro_mrr, 2) + '%'], ['Ativos', x => sgn(x.erro_ativos, 2) + '%'],
+    ['Churn (p.p.)', x => sgn(x.erro_churn, 2)], ['Horas/assinante', x => sgn(x.erro_horas, 2) + '%']], D.decisoes_erradas);
+}
+
+function chartModel() {
+  const r = D.modelo.vies;
+  const feats = [...new Set(r.map(x => x.rotulo))];
+  const get = (v) => feats.map(f => (r.find(x => x.rotulo === f && x.variante === v) || {}).vies_pct);
+  Plotly.react('c-model', [
+    {type: 'bar', orientation: 'h', name: 'Sem limpeza', y: feats, x: get('ingenua'), marker: {color: css('--amber')},
+     hovertemplate: '<b>%{y}</b><br>sem limpeza: %{x:+.1f}%<extra></extra>'},
+    {type: 'bar', orientation: 'h', name: 'Com limpeza', y: feats, x: get('limpa'), marker: {color: css('--accent')},
+     hovertemplate: '<b>%{y}</b><br>com limpeza: %{x:+.1f}%<extra></extra>'}],
+    base({barmode: 'group', margin: {l: 200, r: 16, t: 30, b: 36}, xaxis: Object.assign(base().xaxis, {ticksuffix: '%', zeroline: true, zerolinecolor: css('--muted')})}), cfg);
+}
+
+let curTech = 'todos', curMetric = 'mrr';
+function drawAll() { chartDirty(); chartTech(curTech); chartDaily(); chartCompose(); chartImpact(curMetric); chartWrong(); chartModel(); }
+
+text();
+seg('seg-tech', [['todos', 'Todas'], ...D.grupos.map(g => [g, g])], k => { curTech = k; chartTech(k); }, 'todos');
+seg('seg-metric', D.metricas.map(k => [k, D.series[k].botao]), k => { curMetric = k; chartImpact(k); }, 'mrr');
+drawAll();
+
+const btn = el('themebtn');
+const saved = (() => { try { return localStorage.getItem('dq-theme'); } catch (e) { return null; } })();
+if (saved) document.documentElement.dataset.theme = saved;
+btn.onclick = () => {
+  const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = dark ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('dq-theme', next); } catch (e) {}
+  drawAll();
+};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
+</script>
+</body>
+</html>

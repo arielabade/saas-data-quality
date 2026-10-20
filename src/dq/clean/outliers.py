@@ -64,8 +64,10 @@ def physical_flags(r: pd.DataFrame, violations: pd.Series, tz: pd.Series) -> pd.
 
 
 # ------------------------------------------------------------------------------------- sazonal
-def daily_series(pdays: pd.DataFrame) -> pd.Series:
-    return pdays.groupby("dia")["horas"].sum().asfreq("D", fill_value=0.0)
+def daily_series(pdays: pd.DataFrame, start: str = "2023-10-01", end: str = "2026-10-31") -> pd.Series:
+    """Total diário de horas na janela de análise (datas fora dela são erro de relógio, não dias)."""
+    d = pdays.groupby("dia")["horas"].sum()
+    return d.reindex(pd.date_range(start, end, freq="D"), fill_value=0.0)
 
 
 def seasonal_flags(daily: pd.Series, window: int, z: float) -> pd.DataFrame:

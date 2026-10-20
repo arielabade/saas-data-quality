@@ -16,14 +16,14 @@ profiles:
     sample_seed: 7
 
 paths:
-  generated: data/generated               # saída do gerador (Parquet + CSV)
-  source: data/source                      # snapshot extraído do MySQL: a base de referência
-  raw: data/raw                            # base suja (com defeitos injetados)
-  raw_reference: data/raw_reference        # mesma camada raw, sem defeitos (para medir a verdade)
-  defect_log: data/defect_log              # registro de defeitos: SÓ corrupt/ e evaluate/ conhecem
-  runs: data/runs                          # uma pasta por variante de ETL
-  reports: reports                         # relatórios versionados (resultados)
-  profile_out: reports/profile
+  generated: ${DQ_GENERATED_DIR:-data/generated}              # saída do gerador (Parquet + CSV)
+  source: ${DQ_DATA_DIR:-data}/source                      # snapshot extraído do MySQL: a base de referência
+  raw: ${DQ_DATA_DIR:-data}/raw                            # base suja (com defeitos injetados)
+  raw_reference: ${DQ_DATA_DIR:-data}/raw_reference        # mesma camada raw, sem defeitos (para medir a verdade)
+  defect_log: ${DQ_DATA_DIR:-data}/defect_log              # registro de defeitos: SÓ corrupt/ e evaluate/ conhecem
+  runs: ${DQ_DATA_DIR:-data}/runs                          # uma pasta por variante de ETL
+  reports: ${DQ_REPORTS_DIR:-reports}                        # relatórios versionados (resultados)
+  profile_out: ${DQ_REPORTS_DIR:-reports}/profile
 
 mysql:
   host: ${MYSQL_HOST:-127.0.0.1}

@@ -44,9 +44,14 @@ def _h(*parts) -> str:
 
 
 def run_etl(raw_dir: Path, run_dir: Path, rules: dict | None = None, cutoff: str | None = None,
-            persist_staging: bool = False, strict_contracts: bool | None = None, verbose: bool = True) -> dict:
+            persist_staging: bool = False, strict_contracts: bool | None = None, verbose: bool = True,
+            overrides: dict | None = None) -> dict:
+    """Executa o ETL de uma pasta raw. `rules` liga/desliga regras; `overrides` troca parâmetros
+    (ex.: {"carga": {"janela_atrasados_dias": 0}}); `cutoff` simula a data de hoje (recebido_em)."""
     t_start = time.time()
     ccfg = load_yaml("cleaning")
+    for sec, vals in (overrides or {}).items():
+        ccfg[sec] = {**ccfg[sec], **vals}
     R = {**ccfg["regras"], **(rules or {})}
     strict = all(v for k, v in R.items() if k != "outlier_como_erro") if strict_contracts is None else strict_contracts
     names = settings()["extract"]["tables"]
@@ -234,7 +239,10 @@ def _engagement_incremental(wh: Warehouse, spans: pd.DataFrame, excluded: set[in
         rows.append(marts.engagement_month(plays, spans, excluded, mes, drop))
         wh.state["marts"][mes] = key
         recomputed.append(mes)
-    return pd.DataFrame(rows), recomputed
+    out = pd.DataFrame(rows).astype({"assinantes_ativos": "int64", "contas_com_uso": "int64", "reproducoes": "int64",
+                                     "horas_assistidas": "float64", "horas_por_assinante": "float64",
+                                     "mediana_horas_perfil_dia": "float64"})
+    return out, recomputed
 
 
 def quality_markdown(rep: dict) -> str:

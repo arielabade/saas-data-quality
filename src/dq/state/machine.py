@@ -111,8 +111,6 @@ def build_timeline(ev: pd.DataFrame, subs: pd.DataFrame, strict: bool = True) ->
                 if e.ocorrido_em > since:
                     rows.append((sid, h["conta_id"], state, plano, since, e.ocorrido_em))
                 state, plano, since = nxt, new_plan, max(since, e.ocorrido_em)
-            if strict and state == "cancelado":
-                break
         if state is not None and state != "cancelado":
             rows.append((sid, h["conta_id"], state, plano, since, END_OF_DATA))
     tl = pd.DataFrame(rows, columns=["assinatura_id", "conta_id", "estado", "plano_id", "inicio", "fim"])
