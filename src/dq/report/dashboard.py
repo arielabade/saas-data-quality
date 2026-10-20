@@ -27,7 +27,13 @@ def br(x: float, d: int = 1) -> str:
 
 
 def sbr(x: float, d: int = 1) -> str:
+    if round(x, d) == 0:
+        return br(0.0, d)
     return ("+" if x > 0 else "") + br(x, d)
+
+
+def ibr(n: int) -> str:
+    return f"{n:,d}".replace(",", ".")
 
 
 def money(cents: float) -> str:
@@ -89,22 +95,22 @@ def build_data(r: dict, series: pd.DataFrame) -> dict:
                        f"<span class='hl'>{sbr(h_i['erro_medio'], 1)}%</span> fora da verdade"),
         "bigidea": (f"Injetamos 17 tipos de defeito realistas numa base de streaming por assinatura e registramos cada um. "
                     f"{len(good)} das {len(rules)} regras por linha acertam acima de 95% em precisão e recall. "
-                    f"A armadilha está nos detectores estatísticos: o IQR derrubou {iqr['legitimos_derrubados']:,} perfil-dias "
+                    f"A armadilha está nos detectores estatísticos: o IQR derrubou {ibr(iqr['legitimos_derrubados'])} perfil-dias "
                     f"legítimos (maratonas de estreia, usuários intensos). A combinação recomendada deixa o MRR a "
-                    f"{br(abs(mrr_l['erro_medio']), 2)}% da verdade.").replace(",", "."),
+                    f"{br(abs(mrr_l['erro_medio']), 2)}% da verdade."),
         "h-dirty": f"{br(total_pct, 1)}% das linhas tinham ao menos um defeito; em {top['tabela']}, {br(top['pct'], 1)}%",
         "r-dirty": ("Percentual de linhas de cada tabela da camada raw tocadas por um defeito injetado. Uso (sessões e "
                     "reproduções) concentra o volume; cobrança concentra o impacto em dinheiro."),
         "h-tech": ("Regras de negócio acertam quase tudo; outlier estatístico confunde erro com cliente engajado"),
         "r-tech": ("Precisão: dos marcados, quantos eram defeito (legítimo derrubado conta como erro). Recall: dos defeitos, "
                    "quantos foram pegos. Achados que já existiam na base de referência (nativos) aparecem à parte."),
-        "h-real": (f"O modelo sazonal com calendário separa replay de lote de estreia: precisão "
-                   f"{br(100 * seas_e['precisao'], 0)}% contra {br(100 * naive_d['precisao'], 0)}% do z-score simples"),
+        "h-real": (f"O modelo sazonal pega {seas_e['acertos']} de {seas_e['defeitos_alvo']} dias de replay sem derrubar "
+                   f"estreia nem feriado; o z-score simples pega {naive_d['acertos']}"),
         "r-real": ("Total diário de horas assistidas na base suja. O z-score simples marca qualquer pico (inclusive crescimento "
                    "e estreias). O modelo sazonal compara com tendência e dia da semana e, antes de chamar de erro, procura "
                    "uma estreia ou feriado que explique o pico."),
-        "h-compose": (f"IQR e z-score robusto derrubam {iqr['legitimos_derrubados']:,} e {mad['legitimos_derrubados']:,} "
-                      f"perfil-dias legítimos; a regra física, {phys['legitimos_derrubados']:,}").replace(",", "."),
+        "h-compose": (f"IQR e z-score robusto derrubam {ibr(iqr['legitimos_derrubados'])} e {ibr(mad['legitimos_derrubados'])} "
+                      f"perfil-dias legítimos; a regra física, {ibr(phys['legitimos_derrubados'])}"),
         "r-compose": ("Composição de tudo que cada detector marcou. Cobalt é defeito de verdade; vermelho é cliente real "
                       "tratado como erro. Isolation Forest só ganha precisão quando a anomalia é explicada (robô ou telas acima do limite)."),
         "h-impact": (f"A limpeza tira o MRR de {sbr(mrr_i['erro_medio'], 1)}% para {sbr(mrr_l['erro_medio'], 2)}% "

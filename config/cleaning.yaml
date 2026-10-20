@@ -29,7 +29,7 @@ tempo:
   ano_minimo_valido: 2023
 
 dispositivos:
-  folga_troca_dias: 14            # novo id começa até 14 dias depois do último uso do antigo
+  quantil_intervalo: 0.99         # folga = p99 do intervalo entre sessões do mesmo aparelho (≈40 dias na referência)
 
 limites:
   fator_duracao: 1.05             # assistido <= 105% da duração do conteúdo

@@ -70,6 +70,8 @@ def _fix_types(table: str, df: pd.DataFrame) -> pd.DataFrame:
     for c in df.columns:
         if df[c].dtype == object and df[c].map(type).isin([__import__("decimal").Decimal]).any():
             df[c] = df[c].astype(float)
+        if str(df[c].dtype) in ("int8", "int16", "int32"):   # Parquet do gerador usa inteiros estreitos; MySQL, int64
+            df[c] = df[c].astype("int64")
         if str(df[c].dtype).startswith("datetime64"):
             df[c] = df[c].astype("datetime64[s]")
     return df

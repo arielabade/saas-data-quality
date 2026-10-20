@@ -1,0 +1,15 @@
+tabela,linhas_raw,linhas_com_defeito,pct,tipos
+contas,6055,1393,23.00578034682081,"bot, conta_teste, nulo_uf_tv"
+reproducoes,1247180,101376,8.12841771035456,"atrasado, bot, fuso_misturado, orfao, relogio_errado, replay_lote, sessao_absurda, tempo_maior_que_conteudo, tempo_negativo"
+pagamentos,69014,3299,4.780189526762686,"assinatura_sobreposta, orfao, preco_divergente, retentativa_duplicada, webhook_duplicado"
+sessoes_app,1081672,41214,3.810212337936084,"atrasado, fuso_misturado, orfao, relogio_errado, replay_lote"
+dispositivos,15305,258,1.6857236197321137,troca_dispositivo
+faturas,61503,1030,1.6747150545501845,"assinatura_sobreposta, preco_divergente"
+assinatura_eventos,26051,193,0.7408544777551725,"assinatura_sobreposta, evento_fora_de_ordem"
+assinaturas,7047,43,0.6101887327940968,assinatura_sobreposta
+canais,6,0,0.0,
+planos,3,0,0.0,
+perfis,15696,0,0.0,
+precos,20,0,0.0,
+episodios,24236,0,0.0,
+titulos,3000,0,0.0,

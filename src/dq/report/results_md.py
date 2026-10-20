@@ -55,10 +55,12 @@ def write_results_md(r: dict, path: Path) -> None:
         L.append(f"| {v} | {_num(e['mrr']['erro_medio'], 2, True)}% | {_num(e['ativos']['erro_medio'], 2, True)}% | "
                  f"{_num(e['churn']['erro_medio'], 2, True)} | {_num(e['horas']['erro_medio'], 2, True)}% |")
 
-    L += ["", "## Decisões erradas e o que custam", "", "| Decisão | Métrica mais afetada | Erro médio | Pior mês |", "|---|---|---:|---|"]
+    L += ["", "## Decisões erradas e o que custam", "",
+          "Pipeline completo com UMA regra desligada. Métrica = a que essa decisão mais move em relação à limpeza completa.", "",
+          "| Decisão | Métrica mais afetada | Erro médio vs verdade | Efeito vs limpa | Pior mês |", "|---|---|---:|---:|---|"]
     for x in r["decisoes_erradas"]:
         L.append(f"| {x['decisao']} | {x['metrica_mais_afetada']} | {_num(x['erro_medio'], 2, True)} {x['unidade']} | "
-                 f"{x['pior_mes']} ({_num(x['erro_pior_mes'], 1, True)} {x['unidade']}) |")
+                 f"{_num(x['efeito_vs_limpa'], 2, True)} {x['unidade']} | {x['pior_mes']} ({_num(x['erro_pior_mes'], 1, True)} {x['unidade']}) |")
 
     L += ["", "## Retenção por coorte", "", "| Variante | k | Retenção média |", "|---|---:|---:|"]
     L += [f"| {x['variante']} | {x['k']} | {_pct(x['retencao_media'])} |" for x in r["coortes"]]
@@ -70,8 +72,10 @@ def write_results_md(r: dict, path: Path) -> None:
     for f in dict.fromkeys(x["feature"] for x in cm["vies"]):
         t, lp, ig = vb[("verdade", f)], vb[("limpa", f)], vb[("ingenua", f)]
         L.append(f"| {t['rotulo']} | {_num(t['media'], 2)} | {_num(lp['media'], 2)} | {_num(ig['media'], 2)} | {_num(ig['vies_pct'], 1, True)}% |")
-    L += ["", "| Variante | AUC (teste, dados reais) | AUC (teste, mesma fonte) |", "|---|---:|---:|"]
-    L += [f"| {x['variante']} | {x['auc_teste_dados_reais']:.3f} | {x['auc_teste_mesma_fonte']:.3f} |" for x in cm["desempenho"]]
+    L += ["", "| Variante | AUC (teste, dados reais) | AUC (teste, mesma fonte) | Churn previsto pelo modelo real | Churn real |",
+          "|---|---:|---:|---:|---:|"]
+    L += [f"| {x['variante']} | {x['auc_teste_dados_reais']:.3f} | {x['auc_teste_mesma_fonte']:.3f} | "
+          f"{_pct(x['churn_previsto_pelo_modelo_real'], 2)} | {_pct(x['churn_real_teste'], 2)} |" for x in cm["desempenho"]]
 
     L += ["", "## Carga incremental e atrasados", "", "| Passo | Partições alteradas (meses) | Meses de engajamento recalculados |", "|---|---|---|"]
     for s in r["incremental"]["passos"]:

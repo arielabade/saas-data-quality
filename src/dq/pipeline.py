@@ -130,7 +130,9 @@ def run_etl(raw_dir: Path, run_dir: Path, rules: dict | None = None, cutoff: str
         fl += [f1, f2, f3, f4]
     fl.append(timestamps.mark_late(s, "sessoes_app", "sessao_id"))
     if R["unificar_dispositivos"]:
-        mapping, f = devices.unify(t["dispositivos"], s, ccfg["dispositivos"]["folga_troca_dias"])
+        slack = devices.idle_gap_days(s, ccfg["dispositivos"]["quantil_intervalo"])
+        rep["folga_troca_dispositivo_dias"] = round(slack, 1)
+        mapping, f = devices.unify(t["dispositivos"], s, slack)
         s, r = devices.apply(s, mapping), devices.apply(r, mapping)
         fl.append(f)
     if R["dedup_uso"]:
@@ -191,7 +193,8 @@ def run_etl(raw_dir: Path, run_dir: Path, rules: dict | None = None, cutoff: str
         "assinantes": marts.subscribers_and_churn(spans, excluded),
         "coortes": marts.cohorts(spans, excluded),
     }
-    m["engajamento"], recomputed = _engagement_incremental(wh, spans, excluded, drop_pd, run_dir)
+    contas_mes = r.groupby(r["inicio_em"].dt.to_period("M").astype(str))["conta_id"].agg(lambda x: set(x.dropna().astype("int64")))
+    m["engajamento"], recomputed = _engagement_incremental(wh, spans, excluded, drop_pd, run_dir, contas_mes)
     contracts += validate("marts", m, raise_on_fail=strict)
     write_layer(m, run_dir / "marts", clean=False)
     wh.save()
@@ -219,17 +222,19 @@ def run_etl(raw_dir: Path, run_dir: Path, rules: dict | None = None, cutoff: str
 
 
 def _engagement_incremental(wh: Warehouse, spans: pd.DataFrame, excluded: set[int], drop_pd: pd.DataFrame | None,
-                            run_dir: Path) -> tuple[pd.DataFrame, list[str]]:
-    """Recalcula o engajamento só dos meses cuja entrada mudou (partição, exclusões, base ativa)."""
+                            run_dir: Path, contas_mes: pd.Series) -> tuple[pd.DataFrame, list[str]]:
+    """Recalcula o engajamento só dos meses cuja entrada mudou: a partição do mês, as exclusões que
+    TOCAM o mês (contas com uso nele) e a base ativa no fim do mês. Um robô descoberto em setembro
+    não reabre março se não assistiu nada em março."""
     path = run_dir / "marts" / "engajamento.parquet"
     prev = pd.read_parquet(path).set_index("mes") if path.exists() else pd.DataFrame()
-    ex_h = _h(sorted(excluded))
     rows, recomputed = [], []
     for p in marts.MONTHS:
         mes = str(p)
         e = marts.eom(p)
         act = spans[(spans["inicio"] <= e) & (spans["fim"] > e)]["conta_id"]
         dp = "" if drop_pd is None else _h(drop_pd[drop_pd["dia"].dt.to_period("M") == p].to_numpy().tolist())
+        ex_h = _h(sorted(excluded & contas_mes.get(mes, set())))
         key = _h(wh.state["particoes"].get(f"reproducoes/{mes}"), ex_h, _h(sorted(act)), dp)
         if wh.state["marts"].get(mes) == key and mes in prev.index:
             rows.append({"mes": mes, **prev.loc[mes].to_dict()})

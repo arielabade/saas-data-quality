@@ -1,0 +1,19 @@
+variante,feature,rotulo,coeficiente
+verdade,meses_de_casa,Meses de casa,0.06896723392513747
+verdade,falhas_pagamento_90d,Falhas de pagamento (90 d),0.16182711464710736
+verdade,horas_30d,Horas assistidas (30 d),-0.16698503652170654
+verdade,dias_sem_uso,Dias sem uso,0.010349984486593035
+verdade,aparelhos_90d,Aparelhos (90 d),0.018280826019862403
+verdade,reproducoes_30d,Reproduções (30 d),-0.6078945467735505
+limpa,meses_de_casa,Meses de casa,0.0689882170451768
+limpa,falhas_pagamento_90d,Falhas de pagamento (90 d),0.1613433216691019
+limpa,horas_30d,Horas assistidas (30 d),-0.16809443223750142
+limpa,dias_sem_uso,Dias sem uso,0.007133545998033198
+limpa,aparelhos_90d,Aparelhos (90 d),0.018946046209531955
+limpa,reproducoes_30d,Reproduções (30 d),-0.6094109000883629
+ingenua,meses_de_casa,Meses de casa,0.0756692569570911
+ingenua,falhas_pagamento_90d,Falhas de pagamento (90 d),0.1600004520394566
+ingenua,horas_30d,Horas assistidas (30 d),-0.147088283663505
+ingenua,dias_sem_uso,Dias sem uso,0.009049856717107995
+ingenua,aparelhos_90d,Aparelhos (90 d),0.030363970198590787
+ingenua,reproducoes_30d,Reproduções (30 d),-0.629658686549476

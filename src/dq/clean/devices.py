@@ -7,8 +7,10 @@ Saída: mapa dispositivo_id -> dispositivo canônico + flags (ação `corrigir`)
 Dependências: pandas.
 
 Regra: na mesma conta, mesmo tipo e plataforma, um id novo cujo primeiro uso começa depois do
-último uso do anterior (com no máximo 14 dias de intervalo) e sem nenhum uso simultâneo é o mesmo
-aparelho. Dois celulares usados em paralelo nunca são unidos: isso seria apagar um membro da casa.
+último uso do anterior e sem nenhum uso simultâneo é o mesmo aparelho, desde que o intervalo caiba
+no que é normal para um aparelho ficar parado: o p99 do intervalo entre sessões consecutivas do
+mesmo aparelho, medido nos próprios dados (≈40 dias). Uma folga fixa curta (14 dias) perdia um
+terço das reinstalações de quem usa pouco. Dois celulares usados em paralelo nunca são unidos: isso seria apagar um membro da casa.
 """
 
 from __future__ import annotations
@@ -18,7 +20,14 @@ import pandas as pd
 from dq.clean import flags
 
 
-def unify(dispositivos: pd.DataFrame, sessoes: pd.DataFrame, slack_days: int) -> tuple[pd.Series, pd.DataFrame]:
+def idle_gap_days(sessoes: pd.DataFrame, quantile: float) -> float:
+    """Intervalo (dias) entre sessões consecutivas do mesmo aparelho no quantil pedido."""
+    s = sessoes[["dispositivo_id", "inicio_em"]].sort_values(["dispositivo_id", "inicio_em"])
+    gap = s.groupby("dispositivo_id")["inicio_em"].diff().dt.total_seconds() / 86400
+    return float(gap.quantile(quantile)) if gap.notna().any() else 14.0
+
+
+def unify(dispositivos: pd.DataFrame, sessoes: pd.DataFrame, slack_days: float) -> tuple[pd.Series, pd.DataFrame]:
     use = sessoes.groupby("dispositivo_id")["inicio_em"].agg(primeiro="min", ultimo="max")
     d = dispositivos[["dispositivo_id", "conta_id", "tipo", "plataforma"]].merge(use, left_on="dispositivo_id", right_index=True)
     d = d.sort_values(["conta_id", "tipo", "plataforma", "primeiro"])

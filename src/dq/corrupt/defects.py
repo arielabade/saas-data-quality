@@ -160,7 +160,7 @@ def batch_replay(ctx: Ctx, log: DefectLog, cfg: dict, original_ids: set[int]) ->
     days = days[~days.strftime("%m-%d").isin(["12-24", "12-25", "12-31", "01-01"])]
     chosen = ctx.rng.choice(days, c["dias"], replace=False)
     for day in pd.to_datetime(chosen):
-        h0 = int(ctx.rng.integers(14, 24 - c["horas_por_dia"]))
+        h0 = 0 if c["horas_por_dia"] >= 24 else int(ctx.rng.integers(0, 24 - c["horas_por_dia"]))
         lo, hi = day + pd.Timedelta(hours=h0), day + pd.Timedelta(hours=h0 + c["horas_por_dia"])
         ss = s[s["inicio_em"].between(lo, hi) & s["sessao_id"].isin(r.loc[r["reproducao_id"].isin(original_ids), "sessao_id"])].copy()
         rr = r[r["sessao_id"].isin(ss["sessao_id"])].copy()

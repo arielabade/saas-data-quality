@@ -79,6 +79,9 @@ def analyze(variants: tuple[str, ...] = ("verdade", "limpa", "ingenua")) -> dict
     ds = build(list(variants))
     truth = ds["verdade"]
     bias, coefs, perf = [], [], []
+    X0 = lambda df: np.log1p(df[FEATURES].clip(lower=0))  # noqa: E731
+    tr0 = truth[truth["foto"] < TEST_FROM]
+    ref_model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000)).fit(X0(tr0), tr0["churn_90d"])
     for v, d in ds.items():
         for f in FEATURES:
             tm = truth[f].mean()
@@ -92,7 +95,10 @@ def analyze(variants: tuple[str, ...] = ("verdade", "limpa", "ingenua")) -> dict
         te_own = d[d["foto"] >= TEST_FROM]
         perf.append({"variante": v, "auc_teste_dados_reais": float(roc_auc_score(te["churn_90d"], model.predict_proba(X(te))[:, 1])),
                      "auc_teste_mesma_fonte": float(roc_auc_score(te_own["churn_90d"], model.predict_proba(X(te_own))[:, 1])),
-                     "taxa_churn_90d": float(d["churn_90d"].mean()), "linhas_treino": len(tr)})
+                     "taxa_churn_90d": float(d["churn_90d"].mean()), "linhas_treino": len(tr),
+                     # calibração: o modelo treinado em dado real aplicado às features desta variante
+                     "churn_previsto_pelo_modelo_real": float(ref_model.predict_proba(X(te_own))[:, 1].mean()),
+                     "churn_real_teste": float(te_own["churn_90d"].mean())})
         for f, c in zip(FEATURES, model[-1].coef_[0]):
             coefs.append({"variante": v, "feature": f, "rotulo": LABELS[f], "coeficiente": float(c)})
     return {"vies": pd.DataFrame(bias), "coeficientes": pd.DataFrame(coefs), "desempenho": pd.DataFrame(perf)}

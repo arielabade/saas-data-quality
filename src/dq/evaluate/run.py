@@ -121,10 +121,11 @@ def wrong_decisions(err: pd.DataFrame) -> pd.DataFrame:
         e = err[err["variante"] == v].set_index("metrica")
         if e.empty:
             continue
-        main = e.loc[["mrr", "ativos", "churn", "horas"]]
-        top = main["erro_absoluto_medio"].idxmax()
+        base = err[err["variante"] == "limpa"].set_index("metrica")["erro_medio"]
+        effect = (e["erro_medio"] - base).loc[["mrr", "ativos", "churn", "horas"]]
+        top = effect.abs().idxmax()   # a métrica que a decisão mais move em relação ao pipeline completo
         rows.append({"variante": v, "decisao": label, "metrica_mais_afetada": e.loc[top, "rotulo"],
-                     "erro_medio": e.loc[top, "erro_medio"], "unidade": e.loc[top, "unidade"],
+                     "erro_medio": e.loc[top, "erro_medio"], "efeito_vs_limpa": float(effect[top]), "unidade": e.loc[top, "unidade"],
                      "pior_mes": e.loc[top, "pior_mes"], "erro_pior_mes": e.loc[top, "erro_pior_mes"],
                      **{f"erro_{k}": e.loc[k, "erro_medio"] for k in ("mrr", "ativos", "churn", "horas")}})
     return pd.DataFrame(rows)

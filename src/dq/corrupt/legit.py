@@ -178,7 +178,7 @@ def account_sharing(ctx: Ctx, log: DefectLog, n_contas: int, excess: bool) -> No
 
     screens = plan_screens(ctx.t["planos"])
     a = ctx.t["assinaturas"]
-    cand = a[(a["iniciada_em"] < "2026-06-01") & a["encerrada_em"].isna() & a["plano_id"].isin([2, 3] if not excess else [1, 2, 3])]
+    cand = a[(a["iniciada_em"] < "2026-06-01") & a["encerrada_em"].isna() & a["plano_id"].isin([3] if not excess else [1, 2, 3])]
     used = set(log.frame()["conta_id"].dropna().astype(int)) if len(log.frame()) else set()
     cand = cand[~cand["conta_id"].isin(used)].drop_duplicates("conta_id")
     chosen = cand.sample(min(n_contas, len(cand)), random_state=int(ctx.rng.integers(1e9)))

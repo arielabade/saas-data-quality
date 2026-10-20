@@ -60,7 +60,8 @@
   @media (max-width: 820px) { .kpis { grid-template-columns: 1fr 1fr; } .kpi:nth-child(3) { padding-left: 0; border-left: 0; }
                               .kpi:nth-child(n+3) { border-top: 1px solid var(--line); } }
   @media (max-width: 480px) { .kpis { grid-template-columns: 1fr; } .kpi + .kpi { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); } }
-  .chart { width: 100%; height: 380px; }
+  .chart { width: 100%; max-width: 100%; overflow: hidden; height: 380px; }
+  section, .kpis, .cta { min-width: 0; max-width: 100%; }
   .chart.tall { height: 520px; }
   .chart.short { height: 300px; }
   .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
@@ -69,7 +70,7 @@
   .seg button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: 7px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-  th:first-child, td:first-child { text-align: left; white-space: normal; }
+  th:first-child, td:first-child { text-align: left; white-space: normal; min-width: 180px; }
   th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
   td.good { color: var(--accent-ink); font-weight: 700; }
   td.bad { color: var(--loss); font-weight: 700; }
@@ -171,6 +172,14 @@ const sgn = (x, d = 1) => (x > 0 ? '+' : '') + fmt(x, d);
 const el = id => document.getElementById(id);
 
 function base(extra = {}) {
+  const out = baseRaw(extra);
+  if (narrow() && out.showlegend !== false) {   // celular: legenda embaixo, sem cobrir o gráfico
+    out.legend = {orientation: 'h', x: 0, y: -0.12, yanchor: 'top', font: {color: css('--muted'), size: 11}};
+    out.margin = Object.assign({}, out.margin, {b: 120, t: 8});
+  }
+  return out;
+}
+function baseRaw(extra = {}) {
   return Object.assign({
     paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
     font: {family: 'Lato, Helvetica Neue, Arial, sans-serif', color: css('--ink'), size: 13},
@@ -182,6 +191,9 @@ function base(extra = {}) {
   }, extra);
 }
 const cfg = {displayModeBar: false, responsive: true};
+const narrow = () => window.innerWidth < 640;
+const short = (s, n = 26) => narrow() && s.length > n ? s.slice(0, n - 1) + '…' : s;
+const leftM = (wide) => narrow() ? 8 : wide;
 
 function table(id, cols, rows) {
   const h = '<table><thead><tr>' + cols.map(c => `<th>${c[0]}</th>`).join('') + '</tr></thead><tbody>' +
@@ -214,7 +226,7 @@ function chartDirty() {
     marker: {color: css('--accent')}, text: r.map(x => fmt(x.pct, 1) + '%'), textposition: 'outside', cliponaxis: false,
     textfont: {color: css('--muted')}, customdata: r.map(x => [x.linhas_com_defeito, x.linhas_raw, x.tipos]),
     hovertemplate: '<b>%{y}</b><br>%{customdata[0]:,} de %{customdata[1]:,} linhas<br>%{customdata[2]}<extra></extra>'}],
-    base({margin: {l: 140, r: 48, t: 8, b: 36}, xaxis: Object.assign(base().xaxis, {ticksuffix: '%'}), showlegend: false}), cfg);
+    base({margin: {l: leftM(140), r: 48, t: 8, b: 36}, yaxis: Object.assign(base().yaxis, {automargin: true}), xaxis: Object.assign(base().xaxis, {ticksuffix: '%'}), showlegend: false}), cfg);
   table('t-dirty', [['Tabela', x => x.tabela], ['Linhas no raw', x => x.linhas_raw.toLocaleString('pt-BR')],
     ['Com defeito', x => x.linhas_com_defeito.toLocaleString('pt-BR')], ['%', x => fmt(x.pct, 2) + '%'], ['Defeitos', x => x.tipos]],
     D.base_suja.filter(x => x.linhas_com_defeito > 0));
@@ -223,12 +235,13 @@ function chartDirty() {
 function chartTech(group) {
   const r = D.deteccao.filter(x => group === 'todos' || x.grupo === group).slice().reverse();
   const y = r.map(x => x.tecnica);
+  const ys = y.map(v => short(v));
   Plotly.react('c-tech', [
-    {type: 'bar', orientation: 'h', name: 'Precisão', y, x: r.map(x => 100 * x.precisao), marker: {color: css('--accent')},
-     hovertemplate: '<b>%{y}</b><br>Precisão %{x:.1f}%<extra></extra>'},
-    {type: 'bar', orientation: 'h', name: 'Recall', y, x: r.map(x => 100 * x.recall), marker: {color: css('--amber')},
-     hovertemplate: '<b>%{y}</b><br>Recall %{x:.1f}%<extra></extra>'},
-  ], base({barmode: 'group', bargap: 0.35, bargroupgap: 0.08, margin: {l: 290, r: 16, t: 30, b: 36},
+    {type: 'bar', orientation: 'h', name: 'Precisão', y: ys, x: r.map(x => 100 * x.precisao), marker: {color: css('--accent')},
+     customdata: y, hovertemplate: '<b>%{customdata}</b><br>Precisão %{x:.1f}%<extra></extra>'},
+    {type: 'bar', orientation: 'h', name: 'Recall', y: ys, x: r.map(x => 100 * x.recall), marker: {color: css('--amber')},
+     customdata: y, hovertemplate: '<b>%{customdata}</b><br>Recall %{x:.1f}%<extra></extra>'},
+  ], base({barmode: 'group', bargap: 0.35, bargroupgap: 0.08, margin: {l: leftM(290), r: 16, t: 30, b: 36},
     xaxis: Object.assign(base().xaxis, {range: [0, 105], ticksuffix: '%'}), yaxis: Object.assign(base().yaxis, {automargin: true})}), cfg);
   const rr = r.slice().reverse();
   table('t-tech', [['Técnica', x => x.tecnica], ['Unidade', x => x.unidade], ['Marcados', x => x.marcados.toLocaleString('pt-BR')],
@@ -261,12 +274,12 @@ function chartDaily() {
 
 function chartCompose() {
   const r = D.deteccao.filter(x => x.unidade === 'perfil-dia' || x.unidade === 'dia' || x.unidade === 'conta').slice().reverse();
-  const y = r.map(x => x.tecnica);
+  const full = r.map(x => x.tecnica), y = full.map(v => short(v));
   const tr = (name, key, color) => ({type: 'bar', orientation: 'h', name, y, x: r.map(x => x[key]), marker: {color, line: {color: css('--surface'), width: 2}},
-    hovertemplate: `<b>%{y}</b><br>${name}: %{x:,}<extra></extra>`});
+    customdata: full, hovertemplate: `<b>%{customdata}</b><br>${name}: %{x:,}<extra></extra>`});
   Plotly.react('c-compose', [tr('Defeito (acerto)', 'acertos', css('--accent')), tr('Nativo da base', 'nativos', css('--data')),
     tr('Falso positivo', 'falsos_positivos', css('--data-soft')), tr('Legítimo derrubado', 'legitimos_derrubados', css('--loss'))],
-    base({barmode: 'stack', barnorm: 'percent', margin: {l: 290, r: 16, t: 30, b: 36},
+    base({barmode: 'stack', barnorm: 'percent', margin: {l: leftM(290), r: 16, t: 30, b: 36}, legend: {orientation: 'h', y: narrow() ? 1.25 : 1.12, x: 0, font: {color: css('--muted'), size: 12}},
       xaxis: Object.assign(base().xaxis, {ticksuffix: '%'}), yaxis: Object.assign(base().yaxis, {automargin: true})}), cfg);
 }
 
@@ -282,12 +295,15 @@ function chartImpact(metric) {
 
 function chartWrong() {
   const r = D.decisoes_erradas.slice().sort((a, b) => Math.abs(a.erro_medio) - Math.abs(b.erro_medio));
-  Plotly.react('c-wrong', [{type: 'bar', orientation: 'h', y: r.map(x => x.decisao), x: r.map(x => x.erro_medio),
+  const lab = r.map(x => `${x.erro_medio > 0 ? '+' : ''}${fmt(x.erro_medio, 1)} ${x.unidade} ${narrow() ? '' : 'em ' + x.metrica_mais_afetada}`);
+  Plotly.react('c-wrong', [{type: 'bar', orientation: 'h', y: r.map(x => short(x.decisao)), x: r.map(x => x.erro_medio),
     marker: {color: r.map(x => x.erro_medio < 0 ? css('--loss') : css('--accent'))},
-    text: r.map(x => `${sgn(x.erro_medio, 1)} ${x.unidade} em ${x.metrica_mais_afetada}`), textposition: 'outside', cliponaxis: false,
-    textfont: {color: css('--muted'), size: 12},
-    hovertemplate: '<b>%{y}</b><br>%{text}<extra></extra>'}],
-    base({margin: {l: 300, r: 190, t: 8, b: 36}, showlegend: false, xaxis: Object.assign(base().xaxis, {zeroline: true, zerolinecolor: css('--muted')}),
+    text: lab, textposition: r.map(x => x.erro_medio < 0 ? 'inside' : 'outside'), insidetextanchor: 'middle', cliponaxis: false,
+    textfont: {color: r.map(x => x.erro_medio < 0 ? '#FFFFFF' : css('--muted')), size: 12},
+    customdata: r.map(x => [x.decisao, x.metrica_mais_afetada]),
+    hovertemplate: '<b>%{customdata[0]}</b><br>%{text} (%{customdata[1]})<extra></extra>'}],
+    base({margin: {l: leftM(300), r: narrow() ? 60 : 190, t: 8, b: 36}, showlegend: false,
+      xaxis: Object.assign(base().xaxis, {zeroline: true, zerolinecolor: css('--muted')}),
       yaxis: Object.assign(base().yaxis, {automargin: true})}), cfg);
   table('t-wrong', [['Decisão', x => x.decisao], ['MRR', x => sgn(x.erro_mrr, 2) + '%'], ['Ativos', x => sgn(x.erro_ativos, 2) + '%'],
     ['Churn (p.p.)', x => sgn(x.erro_churn, 2)], ['Horas/assinante', x => sgn(x.erro_horas, 2) + '%']], D.decisoes_erradas);
@@ -302,11 +318,12 @@ function chartModel() {
      hovertemplate: '<b>%{y}</b><br>sem limpeza: %{x:+.1f}%<extra></extra>'},
     {type: 'bar', orientation: 'h', name: 'Com limpeza', y: feats, x: get('limpa'), marker: {color: css('--accent')},
      hovertemplate: '<b>%{y}</b><br>com limpeza: %{x:+.1f}%<extra></extra>'}],
-    base({barmode: 'group', margin: {l: 200, r: 16, t: 30, b: 36}, xaxis: Object.assign(base().xaxis, {ticksuffix: '%', zeroline: true, zerolinecolor: css('--muted')})}), cfg);
+    base({barmode: 'group', margin: {l: leftM(200), r: 16, t: 30, b: 36}, yaxis: Object.assign(base().yaxis, {automargin: true}), xaxis: Object.assign(base().xaxis, {ticksuffix: '%', zeroline: true, zerolinecolor: css('--muted')})}), cfg);
 }
 
 let curTech = 'todos', curMetric = 'mrr';
-function drawAll() { chartDirty(); chartTech(curTech); chartDaily(); chartCompose(); chartImpact(curMetric); chartWrong(); chartModel(); }
+function fit() { document.querySelectorAll('.chart').forEach(d => { if (d.data) Plotly.Plots.resize(d); }); }
+function drawAll() { chartDirty(); chartTech(curTech); chartDaily(); chartCompose(); chartImpact(curMetric); chartWrong(); chartModel(); requestAnimationFrame(fit); }
 
 text();
 seg('seg-tech', [['todos', 'Todas'], ...D.grupos.map(g => [g, g])], k => { curTech = k; chartTech(k); }, 'todos');
@@ -324,6 +341,9 @@ btn.onclick = () => {
   drawAll();
 };
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
+let lastNarrow = narrow();
+window.addEventListener('resize', () => { if (narrow() !== lastNarrow) { lastNarrow = narrow(); drawAll(); } else fit(); });
+window.addEventListener('load', fit);
 </script>
 </body>
 </html>

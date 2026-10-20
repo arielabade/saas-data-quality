@@ -1,0 +1,22 @@
+tecnica,grupo,unidade,marcados,acertos,falsos_positivos,legitimos_derrubados,nativos,defeitos_alvo,precisao,recall
+Regras de cadastro (contas internas),cadastro,linha,75,39,0,0,36,40,1.0,0.975
+Integridade referencial (quarentena),cadastro,linha,2380,2380,0,0,0,2380,1.0,1.0
+Chave idempotente + janela (pagamentos),cobranca,linha,2396,2081,16,0,299,2081,0.9923700524558894,1.0
+SCD2: preço vigente na data,cobranca,linha,672,670,2,0,0,670,0.9970238095238095,1.0
+Máquina de estados (ordem dos eventos),assinatura,linha,152,150,2,0,0,150,0.9868421052631579,1.0
+Intervalos por conta (sobreposição),assinatura,linha,43,43,0,0,0,43,1.0,1.0
+Chave natural (replay de lote),uso,linha,6637,6633,0,0,4,6633,1.0,1.0
+Contrato de formato (fuso misturado),uso,linha,23696,23696,0,0,0,23696,1.0,1.0
+Desvio por aparelho (relógio errado),uso,linha,22237,22236,1,0,0,22236,0.9999550299051131,1.0
+Sequência sem sobreposição (troca de ID),uso,linha,240,232,1,0,7,258,0.9957081545064378,0.8992248062015504
+Regra física (por reprodução),uso,linha,78276,7684,86,182,70324,7684,0.966297786720322,1.0
+IQR por mês (Q3 + 3·IQR),outlier de uso,perfil-dia,20645,4557,12,590,15486,8325,0.8833107191316146,0.5473873873873873
+Z-score robusto (mediana/MAD),outlier de uso,perfil-dia,33760,5254,39,908,27559,8325,0.8472826963393001,0.6311111111111111
+"Regra física (≤ duração, ≤ 24 h/aparelho)",outlier de uso,perfil-dia,14640,5931,705,53,7951,8325,0.8866796232620721,0.7124324324324325
+Z-score no total diário (sem sazonalidade),série diária,dia,1,1,0,0,0,3,1.0,0.3333333333333333
+Sazonal (tendência + dia da semana),série diária,dia,17,3,2,4,8,3,0.3333333333333333,1.0
+Sazonal + calendário de estreias e feriados,série diária,dia,13,3,2,0,8,3,0.6,1.0
+Isolation Forest (qualquer anomalia),padrão por conta,conta,157,45,17,4,91,45,0.6818181818181818,1.0
+Isolation Forest + explicação (robô / telas),padrão por conta,conta,119,45,13,2,59,45,0.75,1.0
+Regra simples: telas acima do limite,padrão por conta,conta,216,30,40,5,141,45,0.4,0.6666666666666666
+Regra simples: > 15 reproduções curtas/dia,padrão por conta,conta,26,15,0,0,11,45,1.0,0.3333333333333333

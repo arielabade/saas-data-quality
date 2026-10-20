@@ -28,9 +28,9 @@ defeitos:
     taxa: 0.003
     fator_min: 1.5
     fator_max: 8
-  replay_lote:                   # pipeline reprocessa um lote: horas inteiras duplicadas com ids novos
+  replay_lote:                   # pipeline reprocessa o lote diário inteiro: o dia todo duplicado com ids novos
     dias: 3
-    horas_por_dia: 6
+    horas_por_dia: 24
   fuso_misturado:                # app web grava hora local de Brasília sem offset numa janela de versões
     plataforma: web
     inicio: "2025-02-04"
@@ -69,5 +69,5 @@ legitimos:                       # outliers VERDADEIROS: ficam no registro como 
     dias: 20
   pico_feriado:                  # Natal e Réveillon: mais reproduções em toda a base
     fator: 0.35
-  compartilhamento_legitimo:     # membro extra pago, dentro do limite de telas do plano
+  compartilhamento_legitimo:     # membro extra pago no Premium (4 telas), à tarde: dentro do limite
     n_contas: 30

@@ -53,7 +53,7 @@ lint:
 	$(PY) -m ruff check src tests
 
 e2e:            ## ponta a ponta com perfil pequeno, sem MySQL
-	$(MAKE) DQ_PROFILE=ci DQ_EXTRACT_BACKEND=parquet data corrupt etl evaluate report
+	$(MAKE) DQ_PROFILE=ci DQ_EXTRACT_BACKEND=parquet DQ_DATA_DIR=data/ci DQ_REPORTS_DIR=data/ci/reports data corrupt etl evaluate report
 
 clean:
 	rm -rf data/source data/raw data/raw_reference data/defect_log data/runs
