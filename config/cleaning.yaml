@@ -1,0 +1,54 @@
+# Parâmetros das regras de limpeza (src/dq/clean, src/dq/state, src/dq/load).
+# Cada regra pode ser desligada: é assim que o evaluate mede o custo de NÃO aplicá-la.
+
+regras:
+  contas_internas: true          # QA, funcionários e testes fora das métricas
+  bots: true                     # contas com padrão de robô fora do engajamento e do MRR
+  quarentena_orfaos: true
+  dedup_pagamentos: true
+  dedup_uso: true
+  fuso_e_relogio: true
+  unificar_dispositivos: true
+  limites_fisicos: true
+  maquina_estados: true          # desligado: usa o status e as datas dos eventos como vieram
+  sobreposicao_assinaturas: true
+  preco_scd: true
+  imputar_regiao: true
+  outlier_como_erro: false       # ligado: perfil-dias marcados por IQR são removidos (decisão ERRADA, para comparação)
+
+dedup:
+  pagamentos_janela_seg: 3600    # mesma chave idempotente dentro de 1 h = mesma cobrança
+  pagamentos_chave: [fatura_id, tipo, tentativa, status, valor_centavos]
+  uso_chave_reproducao: [perfil_id, dispositivo_id, titulo_id, episodio_id, inicio_em]
+  uso_chave_sessao: [perfil_id, dispositivo_id, inicio_em]
+
+tempo:
+  tolerancia_evento_antes_criacao_h: 24   # desvio de relógio entre sistemas (visto no perfil: minutos)
+  relogio_desvio_min: 30                  # mediana de (recebido - fim) por aparelho acima disso = relógio errado
+  relogio_consistencia: 0.6               # fração das linhas do aparelho perto da mediana
+  ano_minimo_valido: 2023
+
+dispositivos:
+  folga_troca_dias: 14            # novo id começa até 14 dias depois do último uso do antigo
+
+limites:
+  fator_duracao: 1.05             # assistido <= 105% da duração do conteúdo
+  horas_dia_dispositivo: 24
+  sessao_folga_min: 10            # sessão termina até 10 min depois da última reprodução
+
+outliers:
+  iqr_k: 3.0
+  mad_z: 3.5
+  sazonal_z: 4.0
+  sazonal_janela_dias: 28
+  if_contaminacao: 0.01
+  if_seed: 7
+
+churn:
+  carencia_reativacao_dias: 7     # voltar em até 7 dias não conta como churn
+  estados_vigentes: [trial, ativo, inadimplente, cancelamento_agendado]
+  estados_pagantes: [ativo, cancelamento_agendado]
+
+carga:
+  lote_dias: 7                    # tamanho do lote de ingestão (por recebido_em)
+  janela_atrasados_dias: 30       # evento mais antigo que (início do lote - janela) vai para quarentena

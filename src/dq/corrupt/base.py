@@ -53,6 +53,8 @@ class Ctx:
     def append(self, table: str, df: pd.DataFrame) -> None:
         cur = self.t[table]
         df = df.reindex(columns=cur.columns)
+        for c in [c for c in cur.columns if c.startswith("_")]:  # marcas internas: ausente = falso
+            df[c] = df[c].astype("boolean").fillna(False).astype(bool)
         for c in cur.columns:  # mantém os tipos da tabela original
             if str(cur[c].dtype) != str(df[c].dtype):
                 with contextlib.suppress(TypeError, ValueError):
